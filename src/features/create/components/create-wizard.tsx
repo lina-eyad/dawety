@@ -6,12 +6,16 @@ import {
   ArrowRight,
   Baby,
   Cake,
+  CalendarClock,
   CalendarHeart,
   Check,
+  ClipboardCheck,
   GraduationCap,
   Hand,
   Heart,
+  Images,
   MapPin,
+  MessageCircle,
   Palette,
   Sparkles,
   Wand2,
@@ -22,6 +26,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+
+import {
+  ContactModal,
+  GalleryModal,
+  ProgramModal,
+  RsvpModal,
+} from "./feature-modals";
 
 import {
   DETAILS_FIELDS,
@@ -43,6 +54,13 @@ const EVENT_ICONS: Record<string, typeof Heart> = {
 };
 
 const TAB_ICONS = [Heart, Palette, Wand2, MapPin, Palette, Sparkles];
+
+const FEATURE_OPTIONS = [
+  { label: "تأكيد الحضور RSVP", icon: ClipboardCheck, Modal: RsvpModal },
+  { label: "معلومات التواصل", icon: MessageCircle, Modal: ContactModal },
+  { label: "معرض الصور", icon: Images, Modal: GalleryModal },
+  { label: "برنامج الحفل", icon: CalendarClock, Modal: ProgramModal },
+] as const;
 
 export function CreateWizard() {
   const [tab, setTab] = useState(0);
@@ -304,28 +322,37 @@ export function CreateWizard() {
 
         {tab === 5 ? (
           <StepShell
-            title="خيارات إضافية"
-            desc="أضف لمسات أخيرة إلى دعوتك قبل المعاينة."
+            title="خصص مميزات إضافية لدعوتك"
+            desc="فعّل الميزات التي تحتاجها فقط لتجعل الدعوة أكثر تفاعلاً وملاءمة لضيوفك."
           >
-            <div className="flex flex-col gap-3">
-              {[
-                "تفعيل تأكيد الحضور RSVP",
-                "عرض برنامج الحفل",
-                "معرض الصور",
-                "معلومات التواصل",
-              ].map((opt, i) => (
-                <label
-                  key={opt}
-                  className="flex items-center gap-3 rounded-2xl border border-warm-border p-4"
-                >
-                  <input
-                    type="checkbox"
-                    defaultChecked={i < 2}
-                    className="size-4 accent-[var(--primary)]"
+            <div className="grid gap-3 sm:grid-cols-2">
+              {FEATURE_OPTIONS.map((opt) => {
+                const Modal = opt.Modal;
+                const Icon = opt.icon;
+                return (
+                  <Modal
+                    key={opt.label}
+                    trigger={
+                      <button
+                        type="button"
+                        className="flex items-center gap-3 rounded-2xl border border-warm-border p-4 text-start transition-colors hover:border-primary/40"
+                      >
+                        <span className="flex size-10 items-center justify-center rounded-xl bg-rose text-primary">
+                          <Icon className="size-5" aria-hidden />
+                        </span>
+                        <span>
+                          <span className="block text-sm font-medium text-ink">
+                            {opt.label}
+                          </span>
+                          <span className="text-xs text-ink-muted">
+                            اضغط للإعداد
+                          </span>
+                        </span>
+                      </button>
+                    }
                   />
-                  <span className="text-sm font-medium text-ink">{opt}</span>
-                </label>
-              ))}
+                );
+              })}
             </div>
           </StepShell>
         ) : null}

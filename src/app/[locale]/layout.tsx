@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { getDirection, routing } from "@/i18n/routing";
-import { tajawal } from "@/lib/fonts";
+import { ibmPlexSansArabic, tajawal } from "@/lib/fonts";
 import { AppProviders } from "@/providers/app-providers";
 import "@/styles/globals.css";
 
@@ -47,7 +47,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       dir={direction}
-      className={`${tajawal.variable} h-full`}
+      className={`${tajawal.variable} ${ibmPlexSansArabic.variable} h-full`}
       suppressHydrationWarning
     >
       <body className="flex min-h-full flex-col">

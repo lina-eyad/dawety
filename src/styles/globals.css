@@ -17,6 +17,7 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-tajawal), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-tajawal), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-plex-arabic), var(--font-tajawal), sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -57,6 +58,22 @@
   /* Very soft, premium-feeling shadows only — never heavy. */
   --shadow-soft: var(--shadow-soft-value);
   --shadow-soft-lg: var(--shadow-soft-lg-value);
+  --shadow-brand: var(--shadow-brand-value);
+
+  /* INVITERA brand palette utilities (bg-brand, text-gold, border-warm-border, …) */
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-rose: var(--rose);
+  --color-rose-strong: var(--rose-strong);
+  --color-gold: var(--gold);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-warm-bg: var(--warm-bg);
+  --color-warm-border: var(--warm-border);
+  --color-tan-border: var(--tan-border);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
 }
 
 :root {
@@ -66,39 +83,58 @@
   --card-foreground: #111827;
   --popover: #ffffff;
   --popover-foreground: #111827;
-  /* Brand primary */
-  --primary: #9e0e3d;
+  /* Brand primary — exact Figma value (#9e0d3d). */
+  --primary: #9e0d3d;
   --primary-foreground: #ffffff;
   /* Secondary button: white bg + dark text (border applied in the component) */
   --secondary: #ffffff;
   --secondary-foreground: #111827;
-  --muted: #f3f4f6;
-  --muted-foreground: #5d5b67;
-  /* Accent = soft tint of the brand primary, for hover/active surfaces */
-  --accent: #fdf2f5;
-  --accent-foreground: #9e0e3d;
-  --destructive: #dc2626;
-  --border: #e5e7eb;
-  --input: #e5e7eb;
-  --ring: #9e0e3d;
-  --chart-1: #9e0e3d;
+  --muted: #fbfaf7;
+  --muted-foreground: #5b5e69;
+  /* Accent = rose blush surface used across the design (#fff0f5). */
+  --accent: #fff0f5;
+  --accent-foreground: #9e0d3d;
+  --destructive: #be123c;
+  --border: #eae6de;
+  --input: #eae6de;
+  --ring: #9e0d3d;
+  --chart-1: #9e0d3d;
   --chart-2: #c2456b;
   --chart-3: #db8098;
-  --chart-4: #5d5b67;
-  --chart-5: #9ca3af;
-  --radius: 0.875rem; /* 14px base → buttons/inputs (lg=14, in 12–16), cards (xl≈20, in 18–24) */
-  --shadow-soft-value:
-    0 1px 2px 0 rgb(17 24 39 / 0.04), 0 1px 3px 0 rgb(17 24 39 / 0.06);
+  --chart-4: #5b5e69;
+  --chart-5: #b8955d;
+
+  /* ── INVITERA brand palette (from Figma) ─────────────────────────── */
+  --brand: #9e0d3d;
+  --brand-foreground: #ffffff;
+  --rose: #fff0f5; /* blush accent surface */
+  --rose-strong: #f5e6f0;
+  --gold: #b8955d; /* template/premium accent */
+  --ink: #111827; /* primary text */
+  --ink-muted: #5b5e69; /* secondary text */
+  --warm-bg: #fbfaf7; /* warm off-white surface */
+  --warm-border: #eae6de;
+  --tan-border: #d1c5b5;
+  /* Semantic (from Figma status colors) */
+  --success: #15803d;
+  --warning: #b45309;
+  --danger: #be123c;
+
+  --radius: 1rem; /* 16px base → cards use 16–32, buttons/chips are pill (rounded-full) */
+  /* Signature soft shadow: Figma 0 10 40 rgba(16,19,28,0.04). */
+  --shadow-soft-value: 0 10px 40px 0 rgb(16 19 28 / 0.04);
   --shadow-soft-lg-value:
-    0 2px 8px 0 rgb(17 24 39 / 0.05), 0 8px 24px -4px rgb(17 24 39 / 0.06);
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  /* Brand glow for primary CTAs (Figma 0 10 40 rgba(158,13,61,0.15)). */
+  --shadow-brand-value: 0 10px 40px 0 rgb(158 13 61 / 0.15);
   --sidebar: #ffffff;
   --sidebar-foreground: #111827;
-  --sidebar-primary: #9e0e3d;
+  --sidebar-primary: #9e0d3d;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #fdf2f5;
-  --sidebar-accent-foreground: #9e0e3d;
-  --sidebar-border: #e5e7eb;
-  --sidebar-ring: #9e0e3d;
+  --sidebar-accent: #fff0f5;
+  --sidebar-accent-foreground: #9e0d3d;
+  --sidebar-border: #eae6de;
+  --sidebar-ring: #9e0d3d;
 }
 
 /*

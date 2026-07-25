@@ -3,8 +3,6 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
 import { getDirection, routing } from "@/i18n/routing";
 import { ibmPlexSansArabic, tajawal } from "@/lib/fonts";
 import { AppProviders } from "@/providers/app-providers";
@@ -52,11 +50,7 @@ export default async function LocaleLayout({
     >
       <body className="flex min-h-full flex-col">
         <NextIntlClientProvider>
-          <AppProviders direction={direction}>
-            <SiteHeader />
-            <div className="flex flex-1 flex-col">{children}</div>
-            <SiteFooter />
-          </AppProviders>
+          <AppProviders direction={direction}>{children}</AppProviders>
         </NextIntlClientProvider>
       </body>
     </html>

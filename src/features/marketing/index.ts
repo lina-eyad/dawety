@@ -1,0 +1,11 @@
+export { MarketingNavbar } from "./components/marketing-navbar";
+export { HeroSection } from "./components/hero-section";
+export { StepsSection } from "./components/steps-section";
+export { TemplatesSection } from "./components/templates-section";
+export { FeaturesSection } from "./components/features-section";
+export { GuestsSection } from "./components/guests-section";
+export { PricingSection } from "./components/pricing-section";
+export { TestimonialsSection } from "./components/testimonials-section";
+export { CtaSection } from "./components/cta-section";
+export { FaqSection } from "./components/faq-section";
+export { MarketingFooter } from "./components/marketing-footer";

@@ -1,0 +1,26 @@
+{
+  "Metadata": {
+    "title": "INVITERA — Premium Digital Invitations",
+    "description": "Create elegant digital invitations for weddings, engagements, and events in minutes — no design experience required."
+  },
+  "Home": {
+    "badge": "Foundation ready",
+    "title": "INVITERA Platform",
+    "subtitle": "The technical foundation is in place. Pages and features come in the next phase.",
+    "primaryCta": "Get started",
+    "secondaryCta": "Learn more"
+  },
+  "Error": {
+    "title": "Something went wrong",
+    "description": "We hit an unexpected problem. You can try again.",
+    "retry": "Try again"
+  },
+  "NotFound": {
+    "title": "Page not found",
+    "description": "Sorry, the page you are looking for doesn’t exist or has moved.",
+    "backHome": "Back to home"
+  },
+  "LanguageSwitcher": {
+    "label": "Language"
+  }
+}

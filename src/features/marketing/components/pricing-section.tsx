@@ -10,7 +10,10 @@ const CURRENCIES = ["USD", "SAR", "GBP"] as const;
 /** "صمّم مجانًا، وانشر عندما تكون جاهزًا" — complete vs free-trial plans. */
 export function PricingSection() {
   return (
-    <section id="pricing" className="mx-auto w-full max-w-[1200px] px-6 py-14">
+    <section
+      id="pricing"
+      className="mx-auto w-full max-w-[1200px] px-6 py-[50px]"
+    >
       <SectionHeading
         eyebrow="أسعار بسيطة"
         title="صمّم مجانًا ، وانشر عندما تكون جاهزًا"

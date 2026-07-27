@@ -10,7 +10,7 @@ const ICONS = [LayoutTemplate, SlidersHorizontal, Share2];
 /** "دعوتك جاهزة بثلاث خطوات بسيطة" — 3 numbered step cards. */
 export function StepsSection() {
   return (
-    <section className="mx-auto w-full max-w-[1200px] px-6 py-14">
+    <section className="mx-auto w-full max-w-[1200px] px-6 py-[50px]">
       <SectionHeading
         eyebrow="سهلة وسريعة"
         title="دعوتك جاهزة بثلاث خطوات بسيطة"

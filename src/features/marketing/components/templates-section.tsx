@@ -8,7 +8,7 @@ import { SectionHeading } from "./section-heading";
 /** "قوالب أنيقة تناسب كل احتفال" — filter chips + template card row. */
 export function TemplatesSection() {
   return (
-    <section id="templates" className="bg-background py-14">
+    <section id="templates" className="bg-background py-[50px]">
       <div className="mx-auto w-full max-w-[1200px] px-6">
         <SectionHeading
           eyebrow="قوالب احترافية"

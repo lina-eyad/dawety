@@ -14,7 +14,7 @@ export function TestimonialsSection() {
   return (
     <section
       id="testimonials"
-      className="mx-auto w-full max-w-[1200px] px-6 py-14"
+      className="mx-auto w-full max-w-[1200px] px-6 py-[50px]"
     >
       <SectionHeading
         eyebrow="اراء العملاء"

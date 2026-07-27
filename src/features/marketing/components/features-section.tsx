@@ -15,7 +15,10 @@ const ICONS = [LayoutGrid, Send, Globe, Link2, Languages, Smartphone];
 /** "كل ما تحتاجه لإنشاء دعوة رقمية مميزة" — 6 feature cards (3×2). */
 export function FeaturesSection() {
   return (
-    <section id="features" className="mx-auto w-full max-w-[1200px] px-6 py-14">
+    <section
+      id="features"
+      className="mx-auto w-full max-w-[1200px] px-6 py-[50px]"
+    >
       <SectionHeading
         eyebrow="مميزات متكاملة"
         title="كل ما تحتاجه لإنشاء دعوة رقمية مميزة"

@@ -8,7 +8,7 @@ import { SectionHeading } from "./section-heading";
 /** "كل ما تحتاج معرفته قبل البدء" — FAQ accordion (native details) + contact card. */
 export function FaqSection() {
   return (
-    <section id="faq" className="mx-auto w-full max-w-[1000px] px-6 py-14">
+    <section id="faq" className="mx-auto w-full max-w-[1000px] px-6 py-[50px]">
       <SectionHeading
         eyebrow="الأسئلة الشائعة"
         title="كل ما تحتاج معرفته قبل البدء"

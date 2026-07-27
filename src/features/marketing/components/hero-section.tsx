@@ -37,14 +37,16 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Media — left side in RTL */}
+        {/* Media — left side in RTL. The mockup render has a soft rose backdrop
+            baked into the PNG, so its edges are faded with a radial mask to blend
+            into the white page instead of showing a pink box. */}
         <div className="w-full max-w-md lg:w-[44%]">
           <Image
             src="/images/hero-mockup.png"
             alt="معاينة دعوة رقمية على الحاسوب والجوال"
             width={629}
             height={615}
-            className="h-auto w-full drop-shadow-[0_10px_40px_rgba(16,19,28,0.08)]"
+            className="h-auto w-full [mask-image:radial-gradient(120%_120%_at_50%_48%,#000_62%,transparent_94%)] [-webkit-mask-image:radial-gradient(120%_120%_at_50%_48%,#000_62%,transparent_94%)]"
             priority
           />
         </div>

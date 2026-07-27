@@ -3,7 +3,7 @@ import { Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-/** Hero: rose-glow background, headline, subtitle, dual CTAs, device mockup. */
+/** Hero: white background, headline, subtitle, dual CTAs, device mockup. */
 export function HeroSection() {
   return (
     <section id="home" className="relative overflow-hidden bg-background">

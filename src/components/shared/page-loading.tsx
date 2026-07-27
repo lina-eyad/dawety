@@ -10,16 +10,16 @@ export function PageLoading() {
     <div className="min-h-screen" aria-busy aria-live="polite">
       {/* Navbar */}
       <div className="border-b border-warm-border/70">
-        <div className="mx-auto flex h-[100px] w-full max-w-[1200px] items-center justify-between px-6">
-          <Skeleton className="h-9 w-32" />
-          <div className="hidden items-center gap-6 lg:flex">
+        <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center justify-between px-6">
+          <Skeleton className="h-7 w-28" />
+          <div className="hidden items-center gap-5 lg:flex">
             {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="h-4 w-16" />
+              <Skeleton key={i} className="h-4 w-14" />
             ))}
           </div>
-          <div className="flex items-center gap-4">
-            <Skeleton className="h-6 w-14" />
-            <Skeleton className="h-10 w-28 rounded-[8px]" />
+          <div className="flex items-center gap-3">
+            <Skeleton className="h-6 w-12" />
+            <Skeleton className="h-9 w-24 rounded-[8px]" />
           </div>
         </div>
       </div>

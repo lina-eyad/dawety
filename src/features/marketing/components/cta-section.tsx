@@ -12,7 +12,7 @@ const CTA_POINTS = [
 /** Maroon CTA banner: "ابدأ دعوتك الأولى خلال دقائق". */
 export function CtaSection() {
   return (
-    <section className="mx-auto w-full max-w-[1200px] px-6 py-10">
+    <section className="mx-auto w-full max-w-[1200px] px-6 py-14">
       <div className="relative overflow-hidden rounded-[40px] bg-primary px-8 py-16 text-center text-primary-foreground">
         <Sparkles
           className="absolute start-10 top-8 size-6 opacity-30"

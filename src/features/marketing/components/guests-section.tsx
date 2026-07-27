@@ -18,7 +18,7 @@ const TONE_BG: Record<string, string> = {
 /** "تابع ردود ضيوفك من مكان واحد" — content + guest-summary dashboard card. */
 export function GuestsSection() {
   return (
-    <section className="bg-warm-bg/60 py-20">
+    <section className="bg-background py-20">
       <div className="mx-auto grid w-full max-w-[1200px] items-center gap-12 px-6 lg:grid-cols-2">
         {/* Summary dashboard card */}
         <div className="rounded-3xl border border-warm-border bg-card p-6 shadow-soft-lg">

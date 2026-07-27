@@ -6,14 +6,7 @@ import { Button } from "@/components/ui/button";
 /** Hero: rose-glow background, headline, subtitle, dual CTAs, device mockup. */
 export function HeroSection() {
   return (
-    <section
-      id="home"
-      className="relative overflow-hidden"
-      style={{
-        background:
-          "radial-gradient(60% 60% at 80% 10%, rgba(158,13,61,0.06), transparent 70%), radial-gradient(50% 50% at 15% 30%, rgba(158,13,61,0.05), transparent 70%)",
-      }}
-    >
+    <section id="home" className="relative overflow-hidden bg-background">
       <div className="mx-auto flex w-full max-w-[1200px] flex-col-reverse items-center gap-12 px-6 py-20 lg:flex-row lg:justify-between lg:py-28">
         {/* Media */}
         <div className="w-full max-w-xl lg:w-[52%]">

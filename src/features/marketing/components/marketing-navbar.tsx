@@ -11,7 +11,7 @@ import { NavLanguageSwitcher } from "./nav-language-switcher";
 export function MarketingNavbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-warm-border/70 bg-background/80 backdrop-blur-md">
-      <div className="mx-auto flex h-[100px] w-full max-w-[1200px] items-center justify-between px-[50px]">
+      <div className="mx-auto flex h-[100px] w-full max-w-[1200px] items-center justify-between px-6">
         <Link
           href={ROUTES.home}
           className="flex items-center"
@@ -27,12 +27,12 @@ export function MarketingNavbar() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="text-[18px] font-medium text-ink-muted transition-colors hover:text-primary"
+              className="text-[15px] font-medium text-ink-muted transition-colors hover:text-primary"
             >
               {link.label}
             </a>
@@ -48,14 +48,11 @@ export function MarketingNavbar() {
           {/* Login page not built yet — placeholder anchor to avoid a dead route. */}
           <a
             href="#login"
-            className="hidden text-[18px] font-medium text-ink transition-colors hover:text-primary sm:block"
+            className="hidden text-[15px] font-medium text-ink transition-colors hover:text-primary sm:block"
           >
             تسجيل الدخول
           </a>
-          <Button
-            className="h-[50px] rounded-[8px] px-6 text-[18px] shadow-brand"
-            asChild
-          >
+          <Button size="lg" className="rounded-[8px] shadow-brand" asChild>
             <Link href={ROUTES.create}>ابدأ التصميم</Link>
           </Button>
         </div>

@@ -3,47 +3,54 @@ import { ArrowLeft, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
-/** Hero: white background, headline, subtitle, dual CTAs, device mockup. */
+/** Hero — measurements read directly from the Figma home frame (node 2:2). */
 export function HeroSection() {
   return (
     <section id="home" className="relative overflow-hidden bg-background">
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center gap-12 px-6 py-[50px] lg:flex-row lg:justify-between">
-        {/* Copy — right side in RTL */}
-        <div className="flex w-full max-w-xl flex-col items-center gap-4 text-center lg:w-[44%] lg:items-start lg:text-start">
-          <span className="inline-flex items-center gap-2 rounded-full border border-warm-border bg-background/70 px-4 py-2 text-sm font-medium text-ink shadow-soft">
+        {/* Copy — right side in RTL. Figma: text block ≈515px wide, 30px gaps. */}
+        <div className="flex w-full max-w-[515px] flex-col items-center gap-[30px] text-center lg:w-[43%] lg:items-start lg:text-start">
+          {/* Badge: #fff0f5 bg, #9e0d3d border/text, pill, 6/16 padding */}
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary bg-rose px-4 py-1.5 text-sm font-medium text-primary shadow-[0_1px_2px_0_rgb(0_0_0/0.05)]">
             <Sparkles className="size-4 text-primary" aria-hidden />
             دعوات رقمية لكل مناسباتك
           </span>
 
-          <h1 className="text-4xl leading-[1.15] font-bold text-balance text-ink sm:text-5xl lg:text-[46px]">
+          {/* Heading: IBM Plex Sans Arabic 700, 60px/70px, ls 0.6, #9e0d3d */}
+          <h1 className="font-display text-4xl leading-[1.1] font-bold text-balance text-primary sm:text-5xl lg:text-[60px] lg:leading-[70px] lg:tracking-[0.6px]">
             صمّم دعوتك
             <br />
             بكل سهولة وأناقة
           </h1>
 
-          <p className="max-w-md text-lg leading-relaxed text-ink-muted">
+          {/* Description: Tajawal 400, 20px/33px, #5b5e69 */}
+          <p className="text-lg leading-relaxed text-ink-muted lg:text-xl lg:leading-[33px]">
             أنشئ دعوات رقمية مميزة لمناسباتك وشاركها فوراً عبر الرابط أو واتساب
             بطريقة عصرية وسريعة.
           </p>
 
-          <div className="mt-2 flex flex-wrap items-center justify-center gap-3 lg:justify-start">
-            <Button size="lg" className="h-[50px] rounded-[8px]">
+          {/* CTAs: 60px tall. Filled r8 + shadow-lg; outlined r12, maroon border/text */}
+          <div className="flex flex-wrap items-center justify-center gap-[26px] lg:justify-start">
+            <Button
+              size="lg"
+              className="h-[60px] rounded-[8px] font-bold shadow-lg"
+            >
               ابدأ التصميم
             </Button>
             <Button
               size="lg"
-              variant="secondary"
-              className="h-[50px] rounded-[8px]"
+              variant="outline"
+              className="h-[60px] rounded-[12px] border-primary px-10 font-bold text-primary"
             >
               استعرض القوالب
-              <ArrowLeft className="size-4" aria-hidden />
+              <ArrowLeft className="size-3" aria-hidden />
             </Button>
           </div>
         </div>
 
-        {/* Media — left side in RTL. The mockup render has a soft rose backdrop
-            baked into the PNG, so its edges are faded with a radial mask to blend
-            into the white page instead of showing a pink box. */}
+        {/* Media — left side in RTL. Figma image 629×615. The mockup PNG has a
+            soft rose backdrop baked in, faded with a radial mask to blend into
+            the white page (per the earlier white-background decision). */}
         <div className="w-full max-w-[629px] lg:w-[52%]">
           <Image
             src="/images/hero-mockup.png"

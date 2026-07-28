@@ -22,17 +22,17 @@ export function MarketingNavbar() {
             alt="INVITERA"
             width={199}
             height={58}
-            className="h-[58px] w-auto"
+            className="h-9 w-auto"
             priority
           />
         </Link>
 
-        <nav className="hidden items-center gap-5 lg:flex">
+        <nav className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="text-[18px] font-normal text-ink-muted transition-colors hover:text-primary"
+              className="text-[15px] font-medium text-ink-muted transition-colors hover:text-primary"
             >
               {link.label}
             </a>
@@ -48,15 +48,11 @@ export function MarketingNavbar() {
           {/* Login page not built yet — placeholder anchor to avoid a dead route. */}
           <a
             href="#login"
-            className="hidden text-base font-medium text-ink transition-colors hover:text-primary sm:block"
+            className="hidden text-[15px] font-medium text-ink transition-colors hover:text-primary sm:block"
           >
             تسجيل الدخول
           </a>
-          <Button
-            size="lg"
-            className="h-[50px] rounded-[8px] font-bold shadow-lg"
-            asChild
-          >
+          <Button size="lg" className="h-[50px] rounded-[8px]" asChild>
             <Link href={ROUTES.create}>ابدأ التصميم</Link>
           </Button>
         </div>

@@ -2,6 +2,8 @@ import Image from "next/image";
 import { ArrowLeft, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/constants/routes";
+import { Link } from "@/i18n/navigation";
 
 /** Hero — measurements read directly from the Figma home frame (node 2:2). */
 export function HeroSection() {
@@ -35,8 +37,9 @@ export function HeroSection() {
             <Button
               size="lg"
               className="h-[50px] rounded-[8px] font-semibold shadow-lg"
+              asChild
             >
-              ابدأ التصميم
+              <Link href={ROUTES.create}>ابدأ التصميم</Link>
             </Button>
 
             <Button

@@ -22,7 +22,7 @@ export function PricingSection() {
 
       <div className="mx-auto mt-14 grid max-w-4xl gap-6 md:grid-cols-2">
         {/* Complete plan */}
-        <div className="relative flex flex-col gap-6 rounded-3xl border-2 border-primary/20 bg-card p-8 shadow-brand">
+        <div className="relative flex flex-col gap-6 rounded-[30px] border-2 border-primary/20 bg-card p-8 shadow-brand">
           <span className="absolute start-8 -top-3 rounded-full bg-primary px-4 py-1 text-xs font-medium text-primary-foreground">
             الأنسب لمعظم المستخدمين
           </span>
@@ -82,7 +82,7 @@ export function PricingSection() {
         </div>
 
         {/* Free trial */}
-        <div className="flex flex-col gap-6 rounded-3xl border border-primary/20 bg-card p-8 shadow-soft">
+        <div className="flex flex-col gap-6 rounded-[30px] border border-primary/20 bg-card p-8 shadow-soft">
           <div>
             <h3 className="text-xl font-bold text-ink">تجربة مجانية</h3>
             <p className="text-sm text-ink-muted">للتصميم والمعاينة</p>

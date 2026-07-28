@@ -19,7 +19,7 @@ export function FaqSection() {
         {FAQS.map((faq) => (
           <details
             key={faq.q}
-            className="rounded-2xl border border-primary/20 bg-card p-5 shadow-soft open:[&_svg]:rotate-45"
+            className="rounded-[30px] border border-primary/20 bg-card p-5 shadow-soft open:[&_svg]:rotate-45"
           >
             <summary className="flex cursor-pointer items-center justify-between gap-3 font-bold text-ink [&::-webkit-details-marker]:hidden">
               {faq.q}
@@ -34,7 +34,7 @@ export function FaqSection() {
       </div>
 
       {/* Contact card */}
-      <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-3xl border border-primary/20 bg-rose/40 px-8 py-6 text-center sm:flex-row sm:text-start">
+      <div className="mt-8 flex flex-col items-center justify-between gap-4 rounded-[30px] border border-primary/20 bg-rose/40 px-8 py-6 text-center sm:flex-row sm:text-start">
         <div>
           <h3 className="text-lg font-bold text-ink">لم تجد إجابة لسؤالك؟</h3>
           <p className="text-ink-muted">تواصل معنا وسنجيب عليك بكل سرور.</p>

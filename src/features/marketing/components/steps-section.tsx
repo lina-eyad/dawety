@@ -23,7 +23,7 @@ export function StepsSection() {
           return (
             <div
               key={step.num}
-              className="relative flex flex-col items-center gap-4 rounded-3xl border border-primary/20 bg-card p-8 text-center shadow-soft"
+              className="relative flex flex-col items-center gap-4 rounded-[30px] border border-primary/20 bg-card p-8 text-center shadow-soft"
             >
               <span className="absolute start-6 top-6 text-4xl font-bold text-rose-strong">
                 {step.num}

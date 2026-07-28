@@ -53,7 +53,7 @@ export function TestimonialsSection() {
         {TESTIMONIALS.map((t) => (
           <figure
             key={t.name}
-            className="flex flex-col gap-4 rounded-3xl border border-primary/20 bg-card p-7 shadow-soft"
+            className="flex flex-col gap-4 rounded-[30px] border border-primary/20 bg-card p-7 shadow-soft"
           >
             <div className="flex gap-0.5 text-gold">
               {Array.from({ length: 5 }).map((_, i) => (
@@ -77,22 +77,19 @@ export function TestimonialsSection() {
       </div>
 
       <div className="mt-12 flex justify-center" dir="ltr">
-        <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-3 rounded-full border border-tan-border bg-background px-12 py-6">
+        <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-3 rounded-full border border-primary/20 bg-background px-12 py-6">
           {STATS.map((s, i) => (
             <Fragment key={i}>
               {i > 0 ? (
                 <span
-                  className="hidden h-6 w-px bg-tan-border sm:block"
+                  className="hidden h-6 w-px bg-primary/20 sm:block"
                   aria-hidden
                 />
               ) : null}
               <div className="flex items-center gap-3 text-base font-medium whitespace-nowrap">
                 <span>
                   {s.parts.map((p, j) => (
-                    <span
-                      key={j}
-                      className={p.strong ? "text-ink" : "text-ink-muted"}
-                    >
+                    <span key={j} className="text-[#0B1020]">
                       {p.t}
                       {j < s.parts.length - 1 ? " " : ""}
                     </span>

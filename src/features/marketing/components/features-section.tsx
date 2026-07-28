@@ -31,7 +31,7 @@ export function FeaturesSection() {
           return (
             <div
               key={feature.title}
-              className="flex flex-col gap-4 rounded-3xl border border-primary/20 bg-card p-8 shadow-soft"
+              className="flex flex-col gap-4 rounded-[30px] border border-primary/20 bg-card p-8 shadow-soft"
             >
               <span className="flex size-12 items-center justify-center rounded-2xl bg-rose text-primary">
                 <Icon className="size-6" aria-hidden />

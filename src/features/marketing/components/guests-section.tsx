@@ -21,7 +21,7 @@ export function GuestsSection() {
     <section className="bg-background py-[50px]">
       <div className="mx-auto grid w-full max-w-[1200px] items-center gap-12 px-6 lg:grid-cols-2">
         {/* Summary dashboard card */}
-        <div className="rounded-3xl border border-primary/20 bg-card p-6 shadow-soft-lg">
+        <div className="rounded-[30px] border border-primary/20 bg-card p-6 shadow-soft-lg">
           <div className="flex items-center justify-between">
             <h3 className="font-bold text-ink">ملخص الضيوف</h3>
             <span className="flex size-9 items-center justify-center rounded-full bg-rose text-primary">
@@ -47,7 +47,7 @@ export function GuestsSection() {
             {GUEST_LIST.map((g) => (
               <li
                 key={g.name}
-                className="flex items-center justify-between rounded-2xl border border-primary/20 px-4 py-3"
+                className="flex items-center justify-between rounded-[30px] border border-primary/20 px-4 py-3"
               >
                 <span className="text-sm font-medium text-ink">{g.name}</span>
                 <span

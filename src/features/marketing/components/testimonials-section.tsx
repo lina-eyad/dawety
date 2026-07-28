@@ -55,7 +55,7 @@ export function TestimonialsSection() {
             key={t.name}
             className="flex flex-col gap-4 rounded-[30px] border border-primary/20 bg-card p-7 shadow-soft"
           >
-            <div className="flex gap-0.5 text-gold">
+            <div className="flex gap-0.5 text-primary">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star key={i} className="size-4 fill-current" aria-hidden />
               ))}

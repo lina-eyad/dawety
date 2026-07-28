@@ -53,12 +53,12 @@ export function TemplatesSection() {
               <div className="flex flex-col items-center gap-3 p-4 text-center">
                 <div>
                   <h3 className="font-bold text-ink">{tpl.title}</h3>
-                  <span className="text-sm text-gold">{tpl.tag}</span>
+                  <span className="text-sm text-primary">{tpl.tag}</span>
                 </div>
 
                 <Button
                   variant="outline"
-                  className="h-[50px] w-full rounded-[8px] border-primary font-semibold text-primary"
+                  className="h-[46px] w-full rounded-[8px] border-primary font-semibold text-primary"
                 >
                   استخدم القالب
                 </Button>

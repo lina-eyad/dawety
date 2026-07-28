@@ -69,7 +69,7 @@ export function TestimonialsSection() {
               </span>
               <span>
                 <span className="block font-bold text-ink">{t.name}</span>
-                <span className="text-sm text-gold">{t.tag}</span>
+                <span className="text-sm text-primary">{t.tag}</span>
               </span>
             </figcaption>
           </figure>

@@ -69,7 +69,10 @@ export function PricingSection() {
           </ul>
 
           <div className="mt-auto flex flex-col gap-2">
-            <Button size="lg" className="w-full shadow-brand">
+            <Button
+              size="lg"
+              className="h-[50px] w-full rounded-[8px] font-semibold shadow-lg"
+            >
               ابدأ تصميم دعوتك
             </Button>
             <button type="button" className="text-sm font-medium text-primary">
@@ -102,7 +105,11 @@ export function PricingSection() {
             ))}
           </ul>
 
-          <Button size="lg" variant="secondary" className="mt-auto w-full">
+          <Button
+            size="lg"
+            variant="outline"
+            className="mt-auto h-[50px] w-full rounded-[8px] border-primary font-semibold text-primary"
+          >
             ابدأ مجانًا
           </Button>
         </div>

@@ -40,8 +40,17 @@ export function FaqSection() {
           <p className="text-ink-muted">تواصل معنا وسنجيب عليك بكل سرور.</p>
         </div>
         <div className="flex flex-wrap items-center justify-center gap-3">
-          <Button className="shadow-brand">تواصل معنا</Button>
-          <Button variant="secondary">
+          <Button
+            size="lg"
+            className="h-[50px] rounded-[8px] font-semibold shadow-lg"
+          >
+            تواصل معنا
+          </Button>
+          <Button
+            size="lg"
+            variant="outline"
+            className="h-[50px] rounded-[8px] border-primary font-semibold text-primary"
+          >
             <MessageCircle className="size-4" aria-hidden />
             راسلنا على واتساب
           </Button>

@@ -34,14 +34,15 @@ export function HeroSection() {
           <div className="flex flex-wrap items-center justify-center gap-[26px] lg:justify-start">
             <Button
               size="lg"
-              className="h-[50px] rounded-[8px] font-bold shadow-lg"
+              className="h-[50px] rounded-[8px] font-semibold shadow-lg"
             >
               ابدأ التصميم
             </Button>
+
             <Button
               size="lg"
               variant="outline"
-              className="h-[50px] rounded-[8px] border-primary px-10 font-bold text-primary"
+              className="h-[50px] rounded-[8px] border-primary px-10 font-semibold text-primary"
             >
               استعرض القوالب
               <ArrowLeft className="size-3" aria-hidden />

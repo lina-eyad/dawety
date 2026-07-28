@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 
 import { TEMPLATE_FILTERS, TEMPLATES } from "../content";
 import { SectionHeading } from "./section-heading";
+import { ArrowLeft } from "lucide-react";
 
 /** "قوالب أنيقة تناسب كل احتفال" — filter chips + template card row. */
 export function TemplatesSection() {
@@ -54,7 +55,11 @@ export function TemplatesSection() {
                   <h3 className="font-bold text-ink">{tpl.title}</h3>
                   <span className="text-sm text-gold">{tpl.tag}</span>
                 </div>
-                <Button variant="secondary" size="sm" className="w-full">
+
+                <Button
+                  variant="outline"
+                  className="h-[50px] w-full rounded-[8px] border-primary font-semibold text-primary"
+                >
                   استخدم القالب
                 </Button>
               </div>
@@ -63,8 +68,12 @@ export function TemplatesSection() {
         </div>
 
         <div className="mt-12 flex justify-center">
-          <Button size="lg" className="shadow-brand">
+          <Button
+            size="lg"
+            className="h-[50px] rounded-[8px] font-semibold shadow-lg"
+          >
             استعرض كل القوالب
+            <ArrowLeft className="size-3" aria-hidden />
           </Button>
         </div>
       </div>

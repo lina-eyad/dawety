@@ -39,7 +39,10 @@ export function StepsSection() {
       </div>
 
       <div className="mt-12 flex justify-center">
-        <Button size="lg" className="shadow-brand">
+        <Button
+          size="lg"
+          className="h-[50px] rounded-[8px] font-semibold shadow-lg"
+        >
           ابدأ بتصميم دعوتك الان
         </Button>
       </div>

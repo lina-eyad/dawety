@@ -52,7 +52,11 @@ export function MarketingNavbar() {
           >
             تسجيل الدخول
           </a>
-          <Button size="lg" className="h-[50px] rounded-[8px]" asChild>
+          <Button
+            size="lg"
+            className="h-[50px] rounded-[8px] font-semibold shadow-lg"
+            asChild
+          >
             <Link href={ROUTES.create}>ابدأ التصميم</Link>
           </Button>
         </div>

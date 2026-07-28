@@ -33,14 +33,14 @@ export function CtaSection() {
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Button
               size="lg"
-              className="bg-background text-primary shadow-none hover:bg-background/90"
+              className="h-[50px] rounded-[8px] bg-background font-semibold text-primary shadow-lg hover:bg-background/90"
             >
               ابدأ التصميم
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="border-primary-foreground/40 bg-transparent text-primary-foreground hover:bg-primary-foreground/10"
+              className="h-[50px] rounded-[8px] border-primary-foreground/40 bg-transparent font-semibold text-primary-foreground hover:bg-primary-foreground/10"
             >
               استعرض القوالب
             </Button>

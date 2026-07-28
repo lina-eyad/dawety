@@ -33,7 +33,7 @@ export function NavLanguageSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger
         disabled={isPending}
-        className="flex items-center gap-1.5 text-[15px] font-medium text-ink transition-colors outline-none hover:text-primary disabled:opacity-60"
+        className="flex items-center gap-1.5 text-base font-medium text-ink transition-colors outline-none hover:text-primary disabled:opacity-60"
         aria-label="اختر اللغة"
       >
         <Globe className="size-4" aria-hidden />

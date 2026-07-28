@@ -17,8 +17,8 @@ export function HeroSection() {
           </span>
 
           {/* Heading: IBM Plex Sans Arabic 700, 60px/70px, ls 0.6, #9e0d3d */}
-          <h1 className="font-display text-4xl leading-[1.1] font-bold text-balance text-primary sm:text-5xl lg:text-[60px] lg:leading-[70px] lg:tracking-[0.6px]">
-            صمّم دعوتك
+          <h1 className="text-4xl leading-[1.1] font-bold text-balance text-ink sm:text-5xl lg:text-[60px] lg:leading-[70px] lg:tracking-[0.6px]">
+            <span className="text-primary">صمّم</span> دعوتك
             <br />
             بكل سهولة وأناقة
           </h1>
@@ -40,7 +40,7 @@ export function HeroSection() {
             <Button
               size="lg"
               variant="outline"
-              className="h-[60px] rounded-[12px] border-primary px-10 font-bold text-primary"
+              className="h-[60px] rounded-[8px] border-primary px-10 font-bold text-primary"
             >
               استعرض القوالب
               <ArrowLeft className="size-3" aria-hidden />

@@ -30,18 +30,18 @@ export function HeroSection() {
             بطريقة عصرية وسريعة.
           </p>
 
-          {/* CTAs: 60px tall. Filled r8 + shadow-lg; outlined r12, maroon border/text */}
+          {/* CTAs: 50px tall. Both radius 8; outlined has maroon border/text */}
           <div className="flex flex-wrap items-center justify-center gap-[26px] lg:justify-start">
             <Button
               size="lg"
-              className="h-[60px] rounded-[8px] font-bold shadow-lg"
+              className="h-[50px] rounded-[8px] font-bold shadow-lg"
             >
               ابدأ التصميم
             </Button>
             <Button
               size="lg"
               variant="outline"
-              className="h-[60px] rounded-[12px] border-primary px-10 font-bold text-primary"
+              className="h-[50px] rounded-[8px] border-primary px-10 font-bold text-primary"
             >
               استعرض القوالب
               <ArrowLeft className="size-3" aria-hidden />

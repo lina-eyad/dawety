@@ -39,7 +39,7 @@ export function TemplatesSection() {
           {TEMPLATES.map((tpl) => (
             <div
               key={tpl.title}
-              className="group overflow-hidden rounded-2xl border border-tan-border/60 bg-card shadow-soft transition-shadow hover:shadow-soft-lg"
+              className="group overflow-hidden rounded-2xl border border-primary/20 bg-card shadow-soft transition-shadow hover:shadow-soft-lg"
             >
               <div className="relative aspect-[3/4] overflow-hidden bg-warm-bg">
                 <Image

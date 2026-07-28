@@ -53,7 +53,7 @@ export function TestimonialsSection() {
         {TESTIMONIALS.map((t) => (
           <figure
             key={t.name}
-            className="flex flex-col gap-4 rounded-3xl border border-warm-border bg-card p-7 shadow-soft"
+            className="flex flex-col gap-4 rounded-3xl border border-primary/20 bg-card p-7 shadow-soft"
           >
             <div className="flex gap-0.5 text-gold">
               {Array.from({ length: 5 }).map((_, i) => (

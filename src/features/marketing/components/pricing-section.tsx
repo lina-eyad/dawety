@@ -82,7 +82,7 @@ export function PricingSection() {
         </div>
 
         {/* Free trial */}
-        <div className="flex flex-col gap-6 rounded-3xl border border-warm-border bg-card p-8 shadow-soft">
+        <div className="flex flex-col gap-6 rounded-3xl border border-primary/20 bg-card p-8 shadow-soft">
           <div>
             <h3 className="text-xl font-bold text-ink">تجربة مجانية</h3>
             <p className="text-sm text-ink-muted">للتصميم والمعاينة</p>

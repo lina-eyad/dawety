@@ -3,23 +3,26 @@ import { MessageCircle, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import { FAQS } from "../content";
+import { Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
 
 /** "كل ما تحتاج معرفته قبل البدء" — FAQ accordion (native details) + contact card. */
 export function FaqSection() {
   return (
     <section id="faq" className="mx-auto w-full max-w-[1000px] px-6 py-[50px]">
-      <SectionHeading
-        eyebrow="الأسئلة الشائعة"
-        title="كل ما تحتاج معرفته قبل البدء"
-        description="إجابات واضحة لأكثر الأسئلة شيوعًا حول تصميم الدعوات, النشر, الدفع."
-      />
+      <Reveal>
+        <SectionHeading
+          eyebrow="الأسئلة الشائعة"
+          title="كل ما تحتاج معرفته قبل البدء"
+          description="إجابات واضحة لأكثر الأسئلة شيوعًا حول تصميم الدعوات, النشر, الدفع."
+        />
+      </Reveal>
 
       <div className="mt-12 grid items-start gap-4 md:grid-cols-2">
         {FAQS.map((faq) => (
           <details
             key={faq.q}
-            className="rounded-[15px] border border-primary/20 bg-card p-5 shadow-soft open:[&_svg]:rotate-45"
+            className="rounded-[15px] border border-primary/20 bg-card p-5 shadow-soft transition-all duration-300 hover:shadow-soft-lg open:[&_svg]:rotate-45"
           >
             <summary className="flex cursor-pointer items-center justify-between gap-3 font-bold text-ink [&::-webkit-details-marker]:hidden">
               {faq.q}

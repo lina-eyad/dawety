@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 import { FREE_FEATURES, PLAN_FEATURES } from "../content";
+import { Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
 
 const CURRENCIES = ["USD", "SAR", "GBP"] as const;
@@ -14,15 +15,17 @@ export function PricingSection() {
       id="pricing"
       className="mx-auto w-full max-w-[1200px] px-6 py-[50px]"
     >
-      <SectionHeading
-        eyebrow="أسعار بسيطة"
-        title="صمّم مجانًا ، وانشر عندما تكون جاهزًا"
-        description="صمّم وعاين دعوتك مجانًا بالكامل، وادفع دفعة واحدة فقط عندما تقرر نشرها ومشاركتها."
-      />
+      <Reveal>
+        <SectionHeading
+          eyebrow="أسعار بسيطة"
+          title="صمّم مجانًا ، وانشر عندما تكون جاهزًا"
+          description="صمّم وعاين دعوتك مجانًا بالكامل، وادفع دفعة واحدة فقط عندما تقرر نشرها ومشاركتها."
+        />
+      </Reveal>
 
       <div className="mx-auto mt-14 grid max-w-4xl gap-6 md:grid-cols-2">
         {/* Complete plan */}
-        <div className="relative flex flex-col gap-6 rounded-[30px] border-2 border-primary/20 bg-card p-8 shadow-brand">
+        <div className="relative flex flex-col gap-6 rounded-[30px] border-2 border-primary/20 bg-card p-8 shadow-brand transition-all duration-300 hover:-translate-y-1">
           <span className="absolute start-8 -top-3 rounded-full bg-primary px-4 py-1 text-xs font-medium text-primary-foreground">
             الأنسب لمعظم المستخدمين
           </span>
@@ -82,7 +85,7 @@ export function PricingSection() {
         </div>
 
         {/* Free trial */}
-        <div className="flex flex-col gap-6 rounded-[30px] border border-primary/20 bg-card p-8 shadow-soft">
+        <div className="flex flex-col gap-6 rounded-[30px] border border-primary/20 bg-card p-8 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg">
           <div>
             <h3 className="text-xl font-bold text-ink">تجربة مجانية</h3>
             <p className="text-sm text-ink-muted">للتصميم والمعاينة</p>

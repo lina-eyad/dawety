@@ -2,6 +2,7 @@ import { ShieldCheck, Smile, Star } from "lucide-react";
 import { Fragment } from "react";
 
 import { TESTIMONIALS } from "../content";
+import { Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
 
 /**
@@ -43,17 +44,19 @@ export function TestimonialsSection() {
       id="testimonials"
       className="mx-auto w-full max-w-[1200px] px-6 py-[50px]"
     >
-      <SectionHeading
-        eyebrow="اراء العملاء"
-        title="تجارب جعلت الدعوات أسهل"
-        description="آراء من مستخدمين صمّموا دعواتهم وشاركوها بسهولة عبر الرابط أو واتساب."
-      />
+      <Reveal>
+        <SectionHeading
+          eyebrow="اراء العملاء"
+          title="تجارب جعلت الدعوات أسهل"
+          description="آراء من مستخدمين صمّموا دعواتهم وشاركوها بسهولة عبر الرابط أو واتساب."
+        />
+      </Reveal>
 
       <div className="mt-14 grid gap-6 md:grid-cols-3">
         {TESTIMONIALS.map((t) => (
           <figure
             key={t.name}
-            className="flex flex-col gap-4 rounded-[30px] border border-primary/20 bg-card p-7 shadow-soft"
+            className="flex h-full flex-col gap-4 rounded-[30px] border border-primary/20 bg-card p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg"
           >
             <div className="flex gap-0.5 text-primary">
               {Array.from({ length: 5 }).map((_, i) => (

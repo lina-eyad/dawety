@@ -2,20 +2,24 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 
-import { TEMPLATE_FILTERS, TEMPLATES } from "../content";
-import { SectionHeading } from "./section-heading";
 import { ArrowLeft } from "lucide-react";
+
+import { TEMPLATE_FILTERS, TEMPLATES } from "../content";
+import { Reveal } from "./reveal";
+import { SectionHeading } from "./section-heading";
 
 /** "قوالب أنيقة تناسب كل احتفال" — filter chips + template card row. */
 export function TemplatesSection() {
   return (
     <section id="templates" className="bg-background py-[50px]">
       <div className="mx-auto w-full max-w-[1200px] px-6">
-        <SectionHeading
-          eyebrow="قوالب احترافية"
-          title="قوالب أنيقة تناسب كل احتفال"
-          description="اختر من مجموعة قوالب مصممة بعناية لمختلف المناسبات، وخصصها بسهولة لتناسب ذوقك وتفاصيل مناسبتك."
-        />
+        <Reveal>
+          <SectionHeading
+            eyebrow="قوالب احترافية"
+            title="قوالب أنيقة تناسب كل احتفال"
+            description="اختر من مجموعة قوالب مصممة بعناية لمختلف المناسبات، وخصصها بسهولة لتناسب ذوقك وتفاصيل مناسبتك."
+          />
+        </Reveal>
 
         {/* Filter chips */}
         <div className="mt-10 flex flex-wrap items-center justify-center gap-2.5">
@@ -39,7 +43,7 @@ export function TemplatesSection() {
           {TEMPLATES.map((tpl) => (
             <div
               key={tpl.title}
-              className="group overflow-hidden rounded-[30px] border border-primary/20 bg-card shadow-soft transition-shadow hover:shadow-soft-lg"
+              className="group overflow-hidden rounded-[30px] border border-primary/20 bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg"
             >
               <div className="relative aspect-[3/4] overflow-hidden bg-warm-bg">
                 <Image

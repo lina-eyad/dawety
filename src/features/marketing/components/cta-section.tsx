@@ -1,6 +1,8 @@
 import { Check, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/constants/routes";
+import { Link } from "@/i18n/navigation";
 
 const CTA_POINTS = [
   "تصميم سهل وبسيط",
@@ -34,8 +36,9 @@ export function CtaSection() {
             <Button
               size="lg"
               className="h-[50px] rounded-[8px] bg-background font-semibold text-primary shadow-lg hover:bg-background/90"
+              asChild
             >
-              ابدأ التصميم
+              <Link href={ROUTES.create}>ابدأ التصميم</Link>
             </Button>
             <Button
               size="lg"

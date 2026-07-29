@@ -30,10 +30,9 @@ export function MarketingFooter() {
           <a
             href="tel:+966501234567"
             className="flex items-center gap-2 text-sm text-primary-foreground/90"
-            dir="ltr"
           >
             <Phone className="size-4" aria-hidden />
-            +966 50 1234567
+            <span dir="ltr">+966 50 1234567</span>
           </a>
         </div>
 

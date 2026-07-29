@@ -15,11 +15,11 @@ export function FaqSection() {
         description="إجابات واضحة لأكثر الأسئلة شيوعًا حول تصميم الدعوات, النشر, الدفع."
       />
 
-      <div className="mt-12 grid gap-4 md:grid-cols-2">
+      <div className="mt-12 grid items-start gap-4 md:grid-cols-2">
         {FAQS.map((faq) => (
           <details
             key={faq.q}
-            className="rounded-[30px] border border-primary/20 bg-card p-5 shadow-soft open:[&_svg]:rotate-45"
+            className="rounded-[15px] border border-primary/20 bg-card p-5 shadow-soft open:[&_svg]:rotate-45"
           >
             <summary className="flex cursor-pointer items-center justify-between gap-3 font-bold text-ink [&::-webkit-details-marker]:hidden">
               {faq.q}

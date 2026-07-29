@@ -23,7 +23,7 @@ export function TestimonialsCarousel() {
         type="button"
         onClick={() => scroll(380)}
         aria-label="السابق"
-        className="absolute top-1/2 left-0 z-10 hidden size-12 -translate-y-1/2 items-center justify-center rounded-full bg-background text-ink shadow-soft-lg transition-colors hover:text-primary md:flex lg:-left-4"
+        className="absolute top-1/2 right-0 z-10 hidden size-12 -translate-y-1/2 items-center justify-center rounded-full bg-background text-ink shadow-soft-lg transition-colors hover:text-primary md:flex lg:-right-8"
       >
         <ChevronRight className="size-5" aria-hidden />
       </button>
@@ -33,7 +33,7 @@ export function TestimonialsCarousel() {
         type="button"
         onClick={() => scroll(-380)}
         aria-label="التالي"
-        className="absolute top-1/2 right-0 z-10 hidden size-12 -translate-y-1/2 items-center justify-center rounded-full bg-background text-ink shadow-soft-lg transition-colors hover:text-primary md:flex lg:-right-4"
+        className="absolute top-1/2 left-0 z-10 hidden size-12 -translate-y-1/2 items-center justify-center rounded-full bg-background text-ink shadow-soft-lg transition-colors hover:text-primary md:flex lg:-left-8"
       >
         <ChevronLeft className="size-5" aria-hidden />
       </button>

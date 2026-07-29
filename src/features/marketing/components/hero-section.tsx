@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/constants/routes";
 import { Link } from "@/i18n/navigation";
 
+import { Float } from "./float";
+
 /** Hero — measurements read directly from the Figma home frame (node 2:2). */
 export function HeroSection() {
   return (
@@ -56,7 +58,7 @@ export function HeroSection() {
         {/* Media — left side in RTL. Figma image 629×615. The mockup PNG has a
             soft rose backdrop baked in, faded with a radial mask to blend into
             the white page (per the earlier white-background decision). */}
-        <div className="w-full max-w-[629px] lg:w-[52%]">
+        <Float className="w-full max-w-[629px] lg:w-[52%]">
           <Image
             src="/images/hero-mockup.png"
             alt="معاينة دعوة رقمية على الحاسوب والجوال"
@@ -65,7 +67,7 @@ export function HeroSection() {
             className="h-auto w-full [mask-image:radial-gradient(120%_120%_at_50%_48%,#000_62%,transparent_94%)] [-webkit-mask-image:radial-gradient(120%_120%_at_50%_48%,#000_62%,transparent_94%)]"
             priority
           />
-        </div>
+        </Float>
       </div>
     </section>
   );

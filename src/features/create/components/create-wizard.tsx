@@ -72,9 +72,9 @@ export function CreateWizard() {
   const isLast = tab === WIZARD_TABS.length - 1;
 
   return (
-    <div className="flex w-full flex-col rounded-3xl border border-warm-border bg-card shadow-soft-lg">
+    <div className="flex w-full flex-col rounded-3xl border border-[#d1d5db] bg-card shadow-soft-lg">
       {/* Tab bar */}
-      <div className="flex flex-wrap gap-1 border-b border-warm-border px-4 pt-4">
+      <div className="flex flex-wrap items-center justify-between gap-1 border-b border-[#d1d5db] px-4 pt-4">
         {WIZARD_TABS.map((label, i) => {
           const Icon = TAB_ICONS[i];
           const active = i === tab;
@@ -117,7 +117,7 @@ export function CreateWizard() {
                       "relative flex flex-col items-center gap-2 rounded-2xl border p-5 transition-colors",
                       active
                         ? "border-primary bg-rose text-primary"
-                        : "border-warm-border text-ink-muted hover:border-primary/40",
+                        : "border-[#d1d5db] text-ink-muted hover:border-primary/40",
                     )}
                   >
                     {active ? (
@@ -153,7 +153,7 @@ export function CreateWizard() {
                     onClick={() => setTemplate(i)}
                     className={cn(
                       "group relative overflow-hidden rounded-xl border text-center transition-colors",
-                      active ? "border-primary" : "border-warm-border",
+                      active ? "border-primary" : "border-[#d1d5db]",
                     )}
                   >
                     {active ? (
@@ -215,7 +215,7 @@ export function CreateWizard() {
             </div>
             <div className="mt-4 flex items-center gap-3">
               <Label className="mb-0">الدعوة باسم</Label>
-              <div className="flex overflow-hidden rounded-full border border-warm-border">
+              <div className="flex overflow-hidden rounded-full border border-[#d1d5db]">
                 {["شخص واحد", "شخصين"].map((opt) => (
                   <button
                     key={opt}
@@ -264,7 +264,7 @@ export function CreateWizard() {
                 </span>
               </span>
             </label>
-            <div className="mt-4 flex h-28 items-center justify-center gap-2 rounded-2xl border border-dashed border-warm-border text-sm text-ink-muted">
+            <div className="mt-4 flex h-28 items-center justify-center gap-2 rounded-2xl border border-dashed border-[#d1d5db] text-sm text-ink-muted">
               <MapPin className="size-4" aria-hidden />
               حدد الموقع على الخريطة
             </div>
@@ -308,7 +308,7 @@ export function CreateWizard() {
                         "rounded-full border px-4 py-2 text-sm",
                         i === 0
                           ? "border-primary text-primary"
-                          : "border-warm-border text-ink-muted",
+                          : "border-[#d1d5db] text-ink-muted",
                       )}
                     >
                       {f}
@@ -335,7 +335,7 @@ export function CreateWizard() {
                     trigger={
                       <button
                         type="button"
-                        className="flex items-center gap-3 rounded-2xl border border-warm-border p-4 text-start transition-colors hover:border-primary/40"
+                        className="flex items-center gap-3 rounded-2xl border border-[#d1d5db] p-4 text-start transition-colors hover:border-primary/40"
                       >
                         <span className="flex size-10 items-center justify-center rounded-xl bg-rose text-primary">
                           <Icon className="size-5" aria-hidden />
@@ -359,18 +359,19 @@ export function CreateWizard() {
       </div>
 
       {/* Nav */}
-      <div className="flex items-center justify-between border-t border-warm-border p-4">
+      <div className="flex items-center justify-between border-t border-[#d1d5db] p-4">
         <Button
           variant="secondary"
           onClick={() => setTab((t) => Math.max(0, t - 1))}
           disabled={isFirst}
+          className="h-[50px] rounded-[8px] border-[#d1d5db]"
         >
           <ArrowRight className="size-4" aria-hidden />
           السابق
         </Button>
         <Button
           onClick={() => setTab((t) => Math.min(WIZARD_TABS.length - 1, t + 1))}
-          className="shadow-brand"
+          className="h-[50px] rounded-[8px] shadow-brand"
         >
           {isLast ? "معاينة الدعوة" : "التالي"}
           <ArrowLeft className="size-4" aria-hidden />

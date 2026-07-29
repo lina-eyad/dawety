@@ -23,12 +23,9 @@ export default async function CreatePage({
           </p>
         </header>
 
-        <div className="mt-8">
-          <WizardStepper current={0} />
-        </div>
-
         <div className="mt-10 flex flex-col items-start gap-8 lg:flex-row-reverse">
-          <div className="w-full lg:flex-1">
+          <div className="flex w-full flex-col gap-8 lg:flex-1">
+            <WizardStepper current={0} className="max-w-none px-2" />
             <CreateWizard />
           </div>
           <div className="mx-auto lg:mx-0">

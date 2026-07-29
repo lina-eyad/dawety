@@ -1,9 +1,9 @@
 import { ShieldCheck, Smile, Star } from "lucide-react";
 import { Fragment } from "react";
 
-import { TESTIMONIALS } from "../content";
 import { Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
+import { TestimonialsCarousel } from "./testimonials-carousel";
 
 /**
  * Trust-stats bar (Figma "Stats Bar"): a white pill with tan border, three
@@ -52,32 +52,9 @@ export function TestimonialsSection() {
         />
       </Reveal>
 
-      <div className="mt-14 grid gap-6 md:grid-cols-3">
-        {TESTIMONIALS.map((t) => (
-          <figure
-            key={t.name}
-            className="flex h-full flex-col gap-4 rounded-[30px] border border-primary/20 bg-card p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg"
-          >
-            <div className="flex gap-0.5 text-primary">
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="size-4 fill-current" aria-hidden />
-              ))}
-            </div>
-            <blockquote className="leading-relaxed text-ink">
-              {t.quote}
-            </blockquote>
-            <figcaption className="mt-auto flex items-center gap-3">
-              <span className="flex size-11 items-center justify-center rounded-full bg-rose font-bold text-primary">
-                {t.name.charAt(0)}
-              </span>
-              <span>
-                <span className="block font-bold text-ink">{t.name}</span>
-                <span className="text-sm text-primary">{t.tag}</span>
-              </span>
-            </figcaption>
-          </figure>
-        ))}
-      </div>
+      <Reveal>
+        <TestimonialsCarousel />
+      </Reveal>
 
       <div className="mt-12 flex justify-center" dir="ltr">
         <div className="flex flex-wrap items-center justify-center gap-x-16 gap-y-3 rounded-full border border-primary/20 bg-background px-12 py-6">

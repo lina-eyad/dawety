@@ -1,17 +1,21 @@
 "use client";
 
+import Image from "next/image";
 import {
   CalendarCheck,
   CalendarDays,
   ChevronDown,
   ImagePlus,
+  Images,
   Lock,
   MessageSquare,
   Minus,
   Plus,
+  Star,
   UserCheck,
   Users,
   Utensils,
+  X,
 } from "lucide-react";
 import { useState, type ComponentType, type ReactNode } from "react";
 
@@ -357,28 +361,172 @@ export function ContactModal({ trigger }: { trigger: ReactNode }) {
 }
 
 export function GalleryModal({ trigger }: { trigger: ReactNode }) {
+  const [enabled, setEnabled] = useState(true);
+  const [cover, setCover] = useState(true);
+  const [layout, setLayout] = useState(0);
+  const samples = ["/images/template-1.png", "/images/template-2.png"];
+  const layouts = ["شبكة", "منزلق", "فسيفساء"];
+
   return (
-    <FeatureModal
-      trigger={trigger}
-      title="إعداد معرض الصور"
-      desc="أضف صورًا جميلة تظهر داخل دعوتك وتمنح الضيوف تجربة أكثر دفئًا."
-      toggleLabel="تفعيل معرض الصور"
-      toggleHint="عند تفعيله، سيظهر قسم الصور داخل دعوتك."
-    >
-      <div className="flex flex-col gap-1.5">
-        <Label>عنوان المعرض (اختياري)</Label>
-        <Input placeholder="مثال: لحظاتنا الجميلة" />
-      </div>
-      <div className="flex flex-col items-center gap-2 rounded-2xl border border-dashed border-warm-border p-8 text-center text-ink-muted">
-        <ImagePlus className="size-7 text-primary" aria-hidden />
-        <span className="text-sm font-medium text-ink">
-          اسحب الصور هنا أو اضغط لاختيار الصور
-        </span>
-        <span className="text-xs">
-          JPG / PNG، حتى 6 صور، الحد الأقصى لكل صورة 10MB
-        </span>
-      </div>
-    </FeatureModal>
+    <Dialog>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto sm:max-w-lg">
+        <DialogHeader>
+          <div className="flex items-start gap-3 text-start">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-rose text-primary">
+              <Images className="size-5" aria-hidden />
+            </span>
+            <div>
+              <DialogTitle className="text-lg font-bold text-ink">
+                إعداد معرض الصور
+              </DialogTitle>
+              <DialogDescription className="text-ink-muted">
+                أضف صورًا جميلة تظهر داخل دعوتك وتمنح الضيوف تجربة أكثر دفئًا.
+              </DialogDescription>
+            </div>
+          </div>
+        </DialogHeader>
+
+        {/* Master enable */}
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
+          <span>
+            <span className="block text-sm font-medium text-ink">
+              تفعيل معرض الصور
+            </span>
+            <span className="text-xs text-ink-muted">
+              عند تفعيله، سيظهر قسم الصور داخل دعوتك.
+            </span>
+          </span>
+          <Switch
+            checked={enabled}
+            onClick={() => setEnabled((v) => !v)}
+            label="تفعيل معرض الصور"
+          />
+        </div>
+
+        {/* Config — dimmed while disabled */}
+        <div
+          className={cn(
+            "mt-5 flex flex-col gap-4 transition-opacity",
+            !enabled && "pointer-events-none opacity-50",
+          )}
+        >
+          {/* Gallery title */}
+          <div className="flex flex-col gap-1.5">
+            <Label>عنوان المعرض (اختياري)</Label>
+            <Input
+              placeholder="مثال: لحظاتنا الجميلة"
+              className="h-[50px] rounded-[12px] border-[#e5e7eb] bg-[#f9fafb] px-4"
+            />
+          </div>
+
+          {/* Images */}
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <Label className="mb-0">الصور</Label>
+              <span className="text-xs text-ink-muted" dir="ltr">
+                {samples.length}/6
+              </span>
+            </div>
+
+            {/* Dropzone */}
+            <label className="flex cursor-pointer flex-col items-center gap-1.5 rounded-2xl border border-dashed border-[#d1d5db] bg-[#f9fafb] p-6 text-center transition-colors hover:border-primary/50 hover:bg-rose/30">
+              <ImagePlus className="size-6 text-primary" aria-hidden />
+              <span className="text-sm font-medium text-ink">
+                اسحب الصور هنا أو اضغط للاختيار
+              </span>
+              <span className="text-xs text-ink-muted">
+                JPG / PNG · حتى 6 صور · 10MB لكل صورة
+              </span>
+              <input type="file" accept="image/*" multiple className="hidden" />
+            </label>
+
+            {/* Thumbnails */}
+            <div className="grid grid-cols-3 gap-3">
+              {samples.map((src, i) => (
+                <div
+                  key={src}
+                  className="group relative aspect-square overflow-hidden rounded-xl border border-[#e5e7eb]"
+                >
+                  <Image
+                    src={src}
+                    alt={`صورة ${i + 1}`}
+                    fill
+                    sizes="120px"
+                    className="object-cover"
+                  />
+                  {cover && i === 0 ? (
+                    <span className="absolute end-1.5 top-1.5 rounded-full bg-primary px-2 py-0.5 text-[10px] font-medium text-primary-foreground">
+                      غلاف
+                    </span>
+                  ) : null}
+                  <button
+                    type="button"
+                    aria-label="حذف الصورة"
+                    className="absolute start-1.5 top-1.5 flex size-6 items-center justify-center rounded-full bg-ink/60 text-white opacity-0 transition-opacity group-hover:opacity-100"
+                  >
+                    <X className="size-3.5" aria-hidden />
+                  </button>
+                </div>
+              ))}
+
+              {/* Add tile */}
+              <label className="flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-[#d1d5db] text-ink-muted transition-colors hover:border-primary hover:text-primary">
+                <Plus className="size-5" aria-hidden />
+                <span className="text-xs">إضافة</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                />
+              </label>
+            </div>
+          </div>
+
+          {/* Layout */}
+          <div>
+            <Label>طريقة العرض داخل الدعوة</Label>
+            <div className="mt-2 flex h-[50px] gap-1 rounded-[12px] border border-[#d1d5db] p-1">
+              {layouts.map((l, i) => {
+                const on = layout === i;
+                return (
+                  <button
+                    key={l}
+                    type="button"
+                    onClick={() => setLayout(i)}
+                    className={cn(
+                      "flex flex-1 items-center justify-center rounded-[8px] border text-sm font-medium transition-colors",
+                      on
+                        ? "border-primary/30 bg-rose text-primary"
+                        : "border-transparent text-ink-muted hover:text-ink",
+                    )}
+                  >
+                    {l}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Cover toggle */}
+          <ToggleRow
+            Icon={Star}
+            title="اجعل أول صورة غلافاً للمعرض"
+            desc="تظهر كصورة رئيسية أعلى المعرض"
+            checked={cover}
+            onToggle={() => setCover((v) => !v)}
+          />
+        </div>
+
+        <DialogFooter className="mt-6 gap-2 sm:justify-start">
+          <Button className="shadow-brand">حفظ الإعدادات</Button>
+          <DialogClose asChild>
+            <Button variant="secondary">إلغاء</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 

@@ -40,6 +40,7 @@ import { cn } from "@/lib/utils";
 import {
   ContactModal,
   GalleryModal,
+  NotesModal,
   ProgramModal,
   RsvpModal,
 } from "./feature-modals";
@@ -96,7 +97,7 @@ const FEATURES: {
     desc: "أضف رسالة ترحيب أو ملاحظات هامة للضيوف.",
     Icon: NotebookPen,
     on: true,
-    Modal: null,
+    Modal: NotesModal,
   },
   {
     title: "موسيقى خلفية",

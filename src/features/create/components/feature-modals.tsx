@@ -7,10 +7,13 @@ import {
   ChevronDown,
   ImagePlus,
   Images,
+  Info,
   Lock,
   MessageSquare,
   Minus,
+  NotebookPen,
   Plus,
+  Sparkles,
   Star,
   UserCheck,
   Users,
@@ -517,6 +520,153 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
             checked={cover}
             onToggle={() => setCover((v) => !v)}
           />
+        </div>
+
+        <DialogFooter className="mt-6 gap-2 sm:justify-start">
+          <Button className="shadow-brand">حفظ الإعدادات</Button>
+          <DialogClose asChild>
+            <Button variant="secondary">إلغاء</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+export function NotesModal({ trigger }: { trigger: ReactNode }) {
+  const [enabled, setEnabled] = useState(true);
+  const [message, setMessage] = useState(
+    "يسعدنا ويشرّفنا حضوركم لمشاركتنا هذه المناسبة الغالية على قلوبنا.",
+  );
+  const [placement, setPlacement] = useState(0);
+  const notes = [
+    "الزيّ الرسمي: كلاسيكي أنيق",
+    "يتوفّر موقف سيارات مجاني للضيوف",
+    "نرجو الحضور قبل الموعد بـ 15 دقيقة",
+  ];
+  const placements = ["أعلى الدعوة", "أسفل الدعوة"];
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto sm:max-w-lg">
+        <DialogHeader>
+          <div className="flex items-start gap-3 text-start">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-rose text-primary">
+              <NotebookPen className="size-5" aria-hidden />
+            </span>
+            <div>
+              <DialogTitle className="text-lg font-bold text-ink">
+                إعداد الرسالة والملاحظات
+              </DialogTitle>
+              <DialogDescription className="text-ink-muted">
+                أضف رسالة ترحيب وملاحظات مهمّة تظهر للضيوف داخل الدعوة.
+              </DialogDescription>
+            </div>
+          </div>
+        </DialogHeader>
+
+        {/* Master enable */}
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
+          <span>
+            <span className="block text-sm font-medium text-ink">
+              تفعيل الرسالة والملاحظات
+            </span>
+            <span className="text-xs text-ink-muted">
+              عند تفعيله، ستظهر رسالتك وملاحظاتك داخل الدعوة.
+            </span>
+          </span>
+          <Switch
+            checked={enabled}
+            onClick={() => setEnabled((v) => !v)}
+            label="تفعيل الرسالة والملاحظات"
+          />
+        </div>
+
+        {/* Config — dimmed while disabled */}
+        <div
+          className={cn(
+            "mt-5 flex flex-col gap-4 transition-opacity",
+            !enabled && "pointer-events-none opacity-50",
+          )}
+        >
+          {/* Welcome message */}
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between">
+              <Label className="mb-0">رسالة الترحيب</Label>
+              <span className="text-xs text-ink-muted" dir="ltr">
+                {message.length}/200
+              </span>
+            </div>
+            <textarea
+              rows={3}
+              maxLength={200}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] px-4 py-3 text-sm leading-relaxed outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+            />
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 self-end rounded-full border border-primary/20 bg-rose px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-rose/70"
+            >
+              <Sparkles className="size-4" aria-hidden />
+              استخدام نص مقترح
+            </button>
+          </div>
+
+          {/* Notes */}
+          <div className="flex flex-col gap-2">
+            <Label>ملاحظات مهمّة للضيوف</Label>
+            <div className="flex flex-col gap-2">
+              {notes.map((n) => (
+                <div
+                  key={n}
+                  className="flex items-center gap-3 rounded-2xl border border-[#e5e7eb] p-3"
+                >
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-rose text-primary">
+                    <Info className="size-4" aria-hidden />
+                  </span>
+                  <span className="flex-1 text-sm text-ink">{n}</span>
+                  <button
+                    type="button"
+                    aria-label="حذف الملاحظة"
+                    className="text-ink-muted transition-colors hover:text-primary"
+                  >
+                    <X className="size-4" aria-hidden />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <Button variant="secondary" className="w-full">
+              <Plus className="size-4" aria-hidden />
+              إضافة ملاحظة
+            </Button>
+          </div>
+
+          {/* Placement */}
+          <div>
+            <Label>موضع الظهور داخل الدعوة</Label>
+            <div className="mt-2 flex h-[50px] gap-1 rounded-[12px] border border-[#d1d5db] p-1">
+              {placements.map((p, i) => {
+                const on = placement === i;
+                return (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setPlacement(i)}
+                    className={cn(
+                      "flex flex-1 items-center justify-center rounded-[8px] border text-sm font-medium transition-colors",
+                      on
+                        ? "border-primary/30 bg-rose text-primary"
+                        : "border-transparent text-ink-muted hover:text-ink",
+                    )}
+                  >
+                    {p}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         <DialogFooter className="mt-6 gap-2 sm:justify-start">

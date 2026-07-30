@@ -29,13 +29,15 @@ export function MarketingNavbar() {
 
         <nav className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((link) => (
-            <a
+            <Link
               key={link.href}
-              href={link.href}
+              // Point at the home page + section so the links work from any
+              // route (e.g. /create), not just the landing page.
+              href={`${ROUTES.home}${link.href}`}
               className="text-[15px] font-medium text-ink-muted transition-colors hover:text-primary"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 

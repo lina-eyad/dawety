@@ -1,6 +1,6 @@
 "use client";
 
-import { Check } from "lucide-react";
+import { Check, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -136,7 +136,16 @@ export function PricingPlans() {
                 plan.popular ? "shadow-lg" : "border-primary text-primary",
               )}
             >
-              <Link href={plan.href}>{plan.cta}</Link>
+              {plan.href.startsWith("http") ? (
+                <a href={plan.href} target="_blank" rel="noopener noreferrer">
+                  {plan.contact ? (
+                    <MessageCircle className="size-4" aria-hidden />
+                  ) : null}
+                  {plan.cta}
+                </a>
+              ) : (
+                <Link href={plan.href}>{plan.cta}</Link>
+              )}
             </Button>
           </div>
         ))}

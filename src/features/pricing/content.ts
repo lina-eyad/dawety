@@ -59,8 +59,11 @@ export const PRICING_PLANS: PricingPlan[] = [
     tagline: "لمخطّطي المناسبات ومتعدّدي الدعوات",
     unit: "عرض مخصّص حسب عدد مناسباتك",
     contact: true,
-    cta: "تواصل معنا",
-    href: `${ROUTES.home}#contact`,
+    cta: "تواصل عبر واتساب",
+    // Placeholder number — replace with the real business WhatsApp line.
+    href: `https://wa.me/966501234567?text=${encodeURIComponent(
+      "مرحباً، أرغب بالاستفسار عن باقة المنظّمين في INVITERA.",
+    )}`,
     features: [
       "كل مزايا «دعوة واحدة»",
       "أسعار خاصة على الكميات",

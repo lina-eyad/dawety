@@ -1,6 +1,8 @@
 import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/constants/routes";
+import { Link } from "@/i18n/navigation";
 
 import { ArrowLeft } from "lucide-react";
 
@@ -75,9 +77,12 @@ export function TemplatesSection() {
           <Button
             size="lg"
             className="h-[50px] rounded-[8px] font-semibold shadow-lg"
+            asChild
           >
-            استعرض كل القوالب
-            <ArrowLeft className="size-3" aria-hidden />
+            <Link href={ROUTES.templates}>
+              استعرض كل القوالب
+              <ArrowLeft className="size-3" aria-hidden />
+            </Link>
           </Button>
         </div>
       </div>

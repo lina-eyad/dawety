@@ -48,9 +48,12 @@ export function HeroSection() {
               size="lg"
               variant="outline"
               className="h-[50px] rounded-[8px] border-primary px-10 font-semibold text-primary"
+              asChild
             >
-              استعرض القوالب
-              <ArrowLeft className="size-3" aria-hidden />
+              <Link href={ROUTES.templates}>
+                استعرض القوالب
+                <ArrowLeft className="size-3" aria-hidden />
+              </Link>
             </Button>
           </div>
         </div>

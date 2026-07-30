@@ -3,8 +3,11 @@
 import Image from "next/image";
 import {
   CalendarCheck,
+  CalendarClock,
   CalendarDays,
   ChevronDown,
+  Clock,
+  GripVertical,
   ImagePlus,
   Images,
   Info,
@@ -681,6 +684,9 @@ export function NotesModal({ trigger }: { trigger: ReactNode }) {
 }
 
 export function ProgramModal({ trigger }: { trigger: ReactNode }) {
+  const [enabled, setEnabled] = useState(true);
+  const [showTimes, setShowTimes] = useState(true);
+  const [format, setFormat] = useState(0);
   const steps = [
     { time: "06:00 م", label: "استقبال الضيوف" },
     { time: "07:30 م", label: "العشاء" },
@@ -688,32 +694,134 @@ export function ProgramModal({ trigger }: { trigger: ReactNode }) {
     { time: "10:30 م", label: "تقطيع الكيك" },
     { time: "11:30 م", label: "ختام الحفل" },
   ];
+  const formats = ["12 ساعة", "24 ساعة"];
+
   return (
-    <FeatureModal
-      trigger={trigger}
-      title="برنامج الحفل"
-      desc="أضف الجدول الزمني للعرض للضيوف داخل الدعوة."
-      toggleLabel="عرض برنامج الحفل داخل الدعوة"
-      toggleHint="عند تفعيله، سيظهر جدول البرنامج داخل دعوتك."
-    >
-      <p className="text-sm font-medium text-ink">خطوات برنامج الحفل</p>
-      <div className="flex flex-col gap-2">
-        {steps.map((s) => (
-          <div
-            key={s.label}
-            className="flex items-center gap-3 rounded-2xl border border-warm-border p-3"
-          >
-            <span className="rounded-full bg-rose px-3 py-1 text-xs font-medium text-primary">
-              {s.time}
+    <Dialog>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto sm:max-w-lg">
+        <DialogHeader>
+          <div className="flex items-start gap-3 text-start">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-rose text-primary">
+              <CalendarClock className="size-5" aria-hidden />
             </span>
-            <span className="text-sm text-ink">{s.label}</span>
+            <div>
+              <DialogTitle className="text-lg font-bold text-ink">
+                إعداد برنامج الحفل
+              </DialogTitle>
+              <DialogDescription className="text-ink-muted">
+                رتّب فقرات حفلك زمنياً لتظهر للضيوف داخل الدعوة.
+              </DialogDescription>
+            </div>
           </div>
-        ))}
-      </div>
-      <Button variant="secondary" className="w-full">
-        <Plus className="size-4" aria-hidden />
-        إضافة خطوة جديدة
-      </Button>
-    </FeatureModal>
+        </DialogHeader>
+
+        {/* Master enable */}
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
+          <span>
+            <span className="block text-sm font-medium text-ink">
+              عرض برنامج الحفل داخل الدعوة
+            </span>
+            <span className="text-xs text-ink-muted">
+              عند تفعيله، سيظهر جدول البرنامج داخل دعوتك.
+            </span>
+          </span>
+          <Switch
+            checked={enabled}
+            onClick={() => setEnabled((v) => !v)}
+            label="عرض برنامج الحفل داخل الدعوة"
+          />
+        </div>
+
+        {/* Config — dimmed while disabled */}
+        <div
+          className={cn(
+            "mt-5 flex flex-col gap-4 transition-opacity",
+            !enabled && "pointer-events-none opacity-50",
+          )}
+        >
+          {/* Agenda */}
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <Label className="mb-0">فقرات البرنامج</Label>
+              <span className="text-xs text-ink-muted" dir="ltr">
+                {steps.length}
+              </span>
+            </div>
+            <div className="flex flex-col gap-2.5">
+              {steps.map((s) => (
+                <div
+                  key={s.label}
+                  className="flex items-center gap-3 rounded-2xl border border-[#e5e7eb] p-3"
+                >
+                  <GripVertical
+                    className="size-4 shrink-0 text-ink-muted/50"
+                    aria-hidden
+                  />
+                  {showTimes ? (
+                    <span className="min-w-[64px] rounded-lg bg-rose px-2.5 py-1.5 text-center text-xs font-bold text-primary">
+                      {s.time}
+                    </span>
+                  ) : null}
+                  <span className="flex-1 text-sm text-ink">{s.label}</span>
+                  <button
+                    type="button"
+                    aria-label="حذف الفقرة"
+                    className="text-ink-muted transition-colors hover:text-primary"
+                  >
+                    <X className="size-4" aria-hidden />
+                  </button>
+                </div>
+              ))}
+            </div>
+            <Button variant="secondary" className="w-full">
+              <Plus className="size-4" aria-hidden />
+              إضافة فقرة
+            </Button>
+          </div>
+
+          {/* Show times */}
+          <ToggleRow
+            Icon={Clock}
+            title="إظهار الأوقات"
+            desc="عرض توقيت كل فقرة بجانبها"
+            checked={showTimes}
+            onToggle={() => setShowTimes((v) => !v)}
+          />
+
+          {/* Time format */}
+          <div>
+            <Label>صيغة الوقت</Label>
+            <div className="mt-2 flex h-[50px] gap-1 rounded-[12px] border border-[#d1d5db] p-1">
+              {formats.map((f, i) => {
+                const on = format === i;
+                return (
+                  <button
+                    key={f}
+                    type="button"
+                    onClick={() => setFormat(i)}
+                    className={cn(
+                      "flex flex-1 items-center justify-center rounded-[8px] border text-sm font-medium transition-colors",
+                      on
+                        ? "border-primary/30 bg-rose text-primary"
+                        : "border-transparent text-ink-muted hover:text-ink",
+                    )}
+                  >
+                    {f}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <DialogFooter className="mt-6 gap-2 sm:justify-start">
+          <Button className="shadow-brand">حفظ الإعدادات</Button>
+          <DialogClose asChild>
+            <Button variant="secondary">إلغاء</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }

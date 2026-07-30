@@ -7,14 +7,17 @@ import {
   CalendarDays,
   ChevronDown,
   Clock,
+  Contact,
   GripVertical,
   ImagePlus,
   Images,
   Info,
   Lock,
+  Mail,
   MessageSquare,
   Minus,
   NotebookPen,
+  Phone,
   Plus,
   Sparkles,
   Star,
@@ -40,62 +43,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
-
-/** Shared shell: header + enable toggle + body + cancel/save footer. */
-function FeatureModal({
-  trigger,
-  title,
-  desc,
-  toggleLabel,
-  toggleHint,
-  children,
-}: {
-  trigger: ReactNode;
-  title: string;
-  desc: string;
-  toggleLabel: string;
-  toggleHint: string;
-  children: ReactNode;
-}) {
-  return (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto sm:max-w-lg">
-        <DialogHeader>
-          <DialogTitle className="text-lg font-bold text-ink">
-            {title}
-          </DialogTitle>
-          <DialogDescription className="text-ink-muted">
-            {desc}
-          </DialogDescription>
-        </DialogHeader>
-
-        <label className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
-          <span>
-            <span className="block text-sm font-medium text-ink">
-              {toggleLabel}
-            </span>
-            <span className="text-xs text-ink-muted">{toggleHint}</span>
-          </span>
-          <input
-            type="checkbox"
-            defaultChecked
-            className="size-5 accent-[var(--primary)]"
-          />
-        </label>
-
-        <div className="mt-4 flex flex-col gap-4">{children}</div>
-
-        <DialogFooter className="mt-6 gap-2 sm:justify-start">
-          <Button className="shadow-brand">حفظ الإعدادات</Button>
-          <DialogClose asChild>
-            <Button variant="secondary">إلغاء</Button>
-          </DialogClose>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
-}
 
 /** Icon + title/desc row with a trailing pill switch — used for form options. */
 function ToggleRow({
@@ -332,37 +279,167 @@ export function RsvpModal({ trigger }: { trigger: ReactNode }) {
 }
 
 export function ContactModal({ trigger }: { trigger: ReactNode }) {
+  const [enabled, setEnabled] = useState(true);
+  const [whatsapp, setWhatsapp] = useState(true);
+  const [phone, setPhone] = useState(false);
+  const [email, setEmail] = useState(false);
+  const [waMessage, setWaMessage] = useState(
+    "مرحبًا، لديّ استفسار بخصوص الدعوة.",
+  );
+
+  const field = "h-[50px] rounded-[12px] border-[#e5e7eb] bg-[#f9fafb] px-4";
+  const prefix =
+    "flex items-center rounded-[12px] border border-[#e5e7eb] bg-[#f9fafb] px-3 text-sm text-ink-muted";
+  const reveal = "rounded-2xl border border-dashed border-[#e5e7eb] p-3";
+
   return (
-    <FeatureModal
-      trigger={trigger}
-      title="إعداد معلومات التواصل"
-      desc="أضف وسيلة تواصل تظهر للضيوف داخل الدعوة عند الحاجة."
-      toggleLabel="تفعيل معلومات التواصل"
-      toggleHint="عند تفعيله، سيظهر زر تواصل داخل الدعوة."
-    >
-      <div className="flex flex-col gap-1.5">
-        <Label>اسم جهة التواصل</Label>
-        <Input placeholder="مثال: أحمد / منسقة الحفل / والد العروس" />
-      </div>
-      <div className="flex flex-col gap-1.5">
-        <Label>رقم واتساب</Label>
-        <div className="flex gap-2" dir="ltr">
-          <span className="flex items-center rounded-2xl border border-input px-3 text-sm text-ink-muted">
-            +966
+    <Dialog>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto sm:max-w-lg">
+        <DialogHeader>
+          <div className="flex items-start gap-3 text-start">
+            <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-rose text-primary">
+              <Contact className="size-5" aria-hidden />
+            </span>
+            <div>
+              <DialogTitle className="text-lg font-bold text-ink">
+                إعداد معلومات التواصل
+              </DialogTitle>
+              <DialogDescription className="text-ink-muted">
+                أضف وسائل تواصل تظهر للضيوف داخل الدعوة عند الحاجة.
+              </DialogDescription>
+            </div>
+          </div>
+        </DialogHeader>
+
+        {/* Master enable */}
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
+          <span>
+            <span className="block text-sm font-medium text-ink">
+              تفعيل معلومات التواصل
+            </span>
+            <span className="text-xs text-ink-muted">
+              عند تفعيله، سيظهر زر تواصل داخل الدعوة.
+            </span>
           </span>
-          <Input placeholder="5XXXXXXXX" className="flex-1" />
+          <Switch
+            checked={enabled}
+            onClick={() => setEnabled((v) => !v)}
+            label="تفعيل معلومات التواصل"
+          />
         </div>
-      </div>
-      <div className="flex flex-col gap-1.5">
-        <Label>رسالة واتساب جاهزة (اختياري)</Label>
-        <textarea
-          rows={2}
-          placeholder="مثال: مرحبًا، لدي استفسار بخصوص الدعوة."
-          className="rounded-2xl border border-input bg-transparent px-4 py-3 text-sm outline-none"
-        />
-        <span className="self-start text-xs text-ink-muted">0/120</span>
-      </div>
-    </FeatureModal>
+
+        {/* Config — dimmed while disabled */}
+        <div
+          className={cn(
+            "mt-5 flex flex-col gap-4 transition-opacity",
+            !enabled && "pointer-events-none opacity-50",
+          )}
+        >
+          {/* Contact name */}
+          <div className="flex flex-col gap-1.5">
+            <Label>اسم جهة التواصل</Label>
+            <Input
+              placeholder="مثال: أحمد / منسّقة الحفل / والد العروس"
+              className={field}
+            />
+          </div>
+
+          {/* Channels */}
+          <div className="flex flex-col gap-2">
+            <Label>قنوات التواصل</Label>
+            <div className="flex flex-col gap-2.5">
+              {/* WhatsApp */}
+              <ToggleRow
+                Icon={MessageSquare}
+                title="واتساب"
+                desc="زر محادثة مباشرة عبر واتساب"
+                checked={whatsapp}
+                onToggle={() => setWhatsapp((v) => !v)}
+              />
+              {whatsapp ? (
+                <div className={cn(reveal, "flex flex-col gap-2")}>
+                  <div className="flex gap-2" dir="ltr">
+                    <span className={prefix}>+966</span>
+                    <Input
+                      placeholder="5XXXXXXXX"
+                      className={cn(field, "flex-1")}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-medium text-ink">
+                        رسالة جاهزة (اختياري)
+                      </span>
+                      <span className="text-xs text-ink-muted" dir="ltr">
+                        {waMessage.length}/120
+                      </span>
+                    </div>
+                    <textarea
+                      rows={2}
+                      maxLength={120}
+                      value={waMessage}
+                      onChange={(e) => setWaMessage(e.target.value)}
+                      className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] px-4 py-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
+                    />
+                  </div>
+                </div>
+              ) : null}
+
+              {/* Phone call */}
+              <ToggleRow
+                Icon={Phone}
+                title="مكالمة هاتفية"
+                desc="زر اتصال مباشر"
+                checked={phone}
+                onToggle={() => setPhone((v) => !v)}
+              />
+              {phone ? (
+                <div className={cn(reveal, "flex gap-2")} dir="ltr">
+                  <span className={prefix}>+966</span>
+                  <Input
+                    placeholder="5XXXXXXXX"
+                    className={cn(field, "flex-1")}
+                  />
+                </div>
+              ) : null}
+
+              {/* Email */}
+              <ToggleRow
+                Icon={Mail}
+                title="البريد الإلكتروني"
+                desc="راسلنا عبر البريد"
+                checked={email}
+                onToggle={() => setEmail((v) => !v)}
+              />
+              {email ? (
+                <div className={reveal}>
+                  <Input
+                    type="email"
+                    dir="ltr"
+                    placeholder="name@example.com"
+                    className={cn(field, "w-full")}
+                  />
+                </div>
+              ) : null}
+            </div>
+          </div>
+
+          {/* Button label */}
+          <div className="flex flex-col gap-1.5">
+            <Label>نص زر التواصل داخل الدعوة</Label>
+            <Input defaultValue="تواصل معنا" className={field} />
+          </div>
+        </div>
+
+        <DialogFooter className="mt-6 gap-2 sm:justify-start">
+          <Button className="shadow-brand">حفظ الإعدادات</Button>
+          <DialogClose asChild>
+            <Button variant="secondary">إلغاء</Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 

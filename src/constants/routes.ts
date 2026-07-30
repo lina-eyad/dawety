@@ -9,6 +9,7 @@
 export const ROUTES = {
   home: "/",
   templates: "/templates",
+  pricing: "/pricing",
   create: "/create",
   preview: "/preview",
   checkout: "/checkout",

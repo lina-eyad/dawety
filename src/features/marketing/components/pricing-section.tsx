@@ -1,6 +1,8 @@
 import { Check } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/constants/routes";
+import { Link } from "@/i18n/navigation";
 
 import { FREE_FEATURES, PLAN_FEATURES } from "../content";
 import { Reveal } from "./reveal";
@@ -75,12 +77,16 @@ export function PricingSection() {
             <Button
               size="lg"
               className="h-[50px] w-full rounded-[8px] font-semibold shadow-lg"
+              asChild
             >
-              ابدأ تصميم دعوتك
+              <Link href={ROUTES.create}>ابدأ تصميم دعوتك</Link>
             </Button>
-            <button type="button" className="text-sm font-medium text-primary">
+            <Link
+              href={ROUTES.pricing}
+              className="text-center text-sm font-medium text-primary hover:underline"
+            >
               عرض تفاصيل الأسعار
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -112,8 +118,9 @@ export function PricingSection() {
             size="lg"
             variant="outline"
             className="mt-auto h-[50px] w-full rounded-[8px] border-primary font-semibold text-primary"
+            asChild
           >
-            ابدأ مجانًا
+            <Link href={ROUTES.create}>ابدأ مجانًا</Link>
           </Button>
         </div>
       </div>

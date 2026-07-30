@@ -144,19 +144,17 @@ export function PricingPlans() {
             <Button
               asChild
               size="lg"
-              variant={plan.popular || plan.contact ? "default" : "outline"}
+              variant={plan.popular ? "default" : "outline"}
               className={cn(
                 "mt-auto h-[50px] w-full rounded-[8px] font-semibold",
-                plan.contact
-                  ? "border-transparent bg-[#25d366] text-white shadow-lg hover:bg-[#1eb757]"
-                  : plan.popular
-                    ? "shadow-lg"
-                    : "border-primary text-primary",
+                plan.popular ? "shadow-lg" : "border-primary text-primary",
               )}
             >
               {plan.href.startsWith("http") ? (
                 <a href={plan.href} target="_blank" rel="noopener noreferrer">
-                  {plan.contact ? <WhatsAppIcon className="size-4" /> : null}
+                  {plan.contact ? (
+                    <WhatsAppIcon className="size-5 text-[#25d366]" />
+                  ) : null}
                   {plan.cta}
                 </a>
               ) : (

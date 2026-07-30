@@ -32,8 +32,14 @@ import {
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { Calendar as CalendarPicker } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
@@ -132,6 +138,18 @@ const NAMED_BY = [
 const FIELD_CLASS =
   "h-[50px] rounded-[12px] border-[#e5e7eb] bg-[#f9fafb] px-4";
 
+/** Arabic Gregorian long date with Latin digits, e.g. "الجمعة، 20 يونيو 2025". */
+function formatEventDate(d: Date) {
+  return new Intl.DateTimeFormat("ar", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    calendar: "gregory",
+    numberingSystem: "latn",
+  }).format(d);
+}
+
 /* ---- "التصميم" tab options ---- */
 const DESIGN_COLORS = [
   "#9e0d3d",
@@ -193,6 +211,9 @@ export function CreateWizard() {
   const [template, setTemplate] = useState(3);
   const [guests, setGuests] = useState("شخصين");
   const [calendar, setCalendar] = useState(true);
+  const [eventDate, setEventDate] = useState<Date | undefined>(
+    new Date(2025, 5, 20),
+  );
   const [featureOn, setFeatureOn] = useState(() => FEATURES.map((f) => f.on));
   const [color, setColor] = useState("#9e0d3d");
   const [font, setFont] = useState(0);
@@ -407,11 +428,42 @@ export function CreateWizard() {
             <div className="flex flex-col gap-6">
               {/* Date + start/end time */}
               <div className="grid gap-4 sm:grid-cols-3">
-                <PickerField
-                  label="تاريخ المناسبة"
-                  value="الجمعة، 20 يونيو 2025"
-                  Icon={Calendar}
-                />
+                <div className="flex flex-col gap-1.5">
+                  <Label>تاريخ المناسبة</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button
+                        type="button"
+                        className="flex h-[50px] items-center gap-2 rounded-[12px] border border-[#e5e7eb] bg-[#f9fafb] px-4 text-sm text-ink"
+                      >
+                        <Calendar
+                          className="size-4 shrink-0 text-ink-muted"
+                          aria-hidden
+                        />
+                        <span className="flex-1 text-start">
+                          {eventDate
+                            ? formatEventDate(eventDate)
+                            : "اختر التاريخ"}
+                        </span>
+                        <ChevronDown
+                          className="size-4 shrink-0 text-ink-muted"
+                          aria-hidden
+                        />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent
+                      align="start"
+                      className="w-auto bg-card p-0"
+                    >
+                      <CalendarPicker
+                        mode="single"
+                        selected={eventDate}
+                        onSelect={setEventDate}
+                        defaultMonth={eventDate}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
                 <PickerField
                   label="وقت البداية"
                   value="07:00 مساءً"

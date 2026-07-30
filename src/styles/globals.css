@@ -195,3 +195,47 @@
     }
   }
 }
+
+/* react-day-picker → INVITERA theme (used by components/ui/calendar.tsx).
+   Kept unlayered + double-class specificity so it overrides the library's
+   own .rdp-root defaults. */
+.dawety-rdp.dawety-rdp {
+  --rdp-accent-color: var(--primary);
+  --rdp-accent-background-color: var(--rose);
+  --rdp-today-color: var(--primary);
+  --rdp-day_button-border-radius: 10px;
+  --rdp-day_button-width: 2.5rem;
+  --rdp-day_button-height: 2.5rem;
+  --rdp-day-width: 2.5rem;
+  --rdp-day-height: 2.5rem;
+  --rdp-outside-opacity: 0.4;
+  --rdp-disabled-opacity: 0.4;
+  margin: 0;
+  padding: 0.75rem;
+  font-family: inherit;
+}
+.dawety-rdp .rdp-caption_label {
+  font-weight: 700;
+  color: var(--ink);
+}
+.dawety-rdp .rdp-weekday {
+  color: var(--ink-muted);
+  font-weight: 500;
+  opacity: 1;
+  font-size: 0.75rem;
+}
+.dawety-rdp .rdp-day_button:hover:not(:disabled) {
+  background-color: var(--rose);
+  color: var(--primary);
+}
+.dawety-rdp .rdp-selected .rdp-day_button {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border: none;
+  font-weight: 700;
+}
+.dawety-rdp .rdp-button_previous:hover:not(:disabled),
+.dawety-rdp .rdp-button_next:hover:not(:disabled) {
+  background-color: var(--rose);
+  border-radius: 10px;
+}

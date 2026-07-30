@@ -185,5 +185,13 @@
   }
   html {
     @apply font-sans antialiased;
+    /* Offset in-page anchor jumps by the sticky navbar height (h-[100px]) so a
+       section's heading isn't hidden underneath it. */
+    scroll-padding-top: 6.5rem;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 }

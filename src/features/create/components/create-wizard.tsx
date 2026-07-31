@@ -120,7 +120,7 @@ const WIZARD_I18N: Record<string, WizardStrings> = {
       "خصص مميزات إضافية لدعوتك",
     ],
     descs: [
-      "اختر لغة عرض دعوتك، وسيتحوّل الفورم بالكامل إليها.",
+      "اختر لغة عرض دعوتك.",
       "اختر نوع المناسبة لتظهر لك القوالب المناسبة.",
       "",
       "أضف الأسماء والنصوص الأساسية التي ستظهر داخل الدعوة.",
@@ -153,7 +153,7 @@ const WIZARD_I18N: Record<string, WizardStrings> = {
       "Add extra features",
     ],
     descs: [
-      "Pick the language your invitation is shown in — the whole form switches to it.",
+      "Pick the language your invitation is shown in.",
       "Choose the occasion to see matching templates.",
       "",
       "Add the names and key text that appear inside the invitation.",
@@ -186,7 +186,7 @@ const WIZARD_I18N: Record<string, WizardStrings> = {
       "Ajoutez des fonctionnalités",
     ],
     descs: [
-      "Choisissez la langue de votre invitation — tout le formulaire s’y adapte.",
+      "Choisissez la langue de votre invitation.",
       "Choisissez l’occasion pour voir les modèles adaptés.",
       "",
       "Ajoutez les noms et textes qui apparaîtront dans l’invitation.",
@@ -219,7 +219,7 @@ const WIZARD_I18N: Record<string, WizardStrings> = {
       "Añade funciones adicionales",
     ],
     descs: [
-      "Elige el idioma de tu invitación: todo el formulario cambia a él.",
+      "Elige el idioma de tu invitación.",
       "Elige la ocasión para ver plantillas adecuadas.",
       "",
       "Añade los nombres y textos que aparecerán en la invitación.",
@@ -252,7 +252,7 @@ const WIZARD_I18N: Record<string, WizardStrings> = {
       "Tambahkan fitur tambahan",
     ],
     descs: [
-      "Pilih bahasa tampilan undangan — seluruh formulir akan mengikutinya.",
+      "Pilih bahasa tampilan undangan.",
       "Pilih jenis acara untuk melihat template yang sesuai.",
       "",
       "Tambahkan nama dan teks utama yang tampil di undangan.",
@@ -285,7 +285,7 @@ const WIZARD_I18N: Record<string, WizardStrings> = {
       "Ek özellikler ekleyin",
     ],
     descs: [
-      "Davetiyenizin dilini seçin — tüm form o dile geçer.",
+      "Davetiyenizin dilini seçin.",
       "Uygun şablonları görmek için etkinlik türünü seçin.",
       "",
       "Davetiyede görünecek isimleri ve metinleri ekleyin.",

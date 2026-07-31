@@ -73,15 +73,232 @@ const EVENT_ICONS: Record<string, typeof Heart> = {
 
 const TAB_ICONS = [Languages, Heart, Palette, Wand2, MapPin, Palette, Sparkles];
 
-/** Languages the invitation can be shown in (guests can switch between them). */
+/** Invitation/form language — the user picks one and the form switches to it. */
 const LANGUAGES = [
-  { code: "ar", label: "العربية", sub: "Arabic" },
-  { code: "en", label: "English", sub: "الإنجليزية" },
-  { code: "fr", label: "Français", sub: "الفرنسية" },
-  { code: "tr", label: "Türkçe", sub: "التركية" },
-  { code: "ur", label: "اردو", sub: "الأردية" },
-  { code: "es", label: "Español", sub: "الإسبانية" },
+  { code: "ar", label: "العربية", sub: "Arabic", dir: "rtl" as const },
+  { code: "en", label: "English", sub: "الإنجليزية", dir: "ltr" as const },
+  { code: "fr", label: "Français", sub: "الفرنسية", dir: "ltr" as const },
+  { code: "es", label: "Español", sub: "الإسبانية", dir: "ltr" as const },
+  {
+    code: "id",
+    label: "Bahasa Indonesia",
+    sub: "الإندونيسية",
+    dir: "ltr" as const,
+  },
+  { code: "tr", label: "Türkçe", sub: "التركية", dir: "ltr" as const },
 ];
+
+type WizardStrings = {
+  tabs: string[];
+  titles: string[];
+  descs: string[];
+  prev: string;
+  next: string;
+  preview: string;
+  showAll: string;
+};
+
+/** Localised wizard chrome (tab labels, step headings, nav) per form language. */
+const WIZARD_I18N: Record<string, WizardStrings> = {
+  ar: {
+    tabs: [
+      "اللغات",
+      "نوع المناسبة",
+      "القالب",
+      "التفاصيل",
+      "التاريخ والمكان",
+      "التصميم",
+      "خيارات إضافية",
+    ],
+    titles: [
+      "اختر لغة الدعوة",
+      "اختر نوع المناسبة",
+      "اختر قالب دعوتك",
+      "أدخل تفاصيل دعوتك",
+      "حدد تاريخ ومكان مناسبتك",
+      "خصص تصميم دعوتك",
+      "خصص مميزات إضافية لدعوتك",
+    ],
+    descs: [
+      "اختر لغة عرض دعوتك، وسيتحوّل الفورم بالكامل إليها.",
+      "اختر نوع المناسبة لتظهر لك القوالب المناسبة.",
+      "",
+      "أضف الأسماء والنصوص الأساسية التي ستظهر داخل الدعوة.",
+      "اختر التاريخ والوقت وأضف موقع الحفل ليتعرف ضيوفك على التفاصيل بسهولة.",
+      "اختر الألوان والخطوط والخلفيات التي تعكس ذوقك وتناسب مناسبتك.",
+      "فعّل الميزات التي تحتاجها فقط لتجعل الدعوة أكثر تفاعلاً وملاءمة لضيوفك.",
+    ],
+    prev: "السابق",
+    next: "التالي",
+    preview: "معاينة الدعوة",
+    showAll: "عرض الكل",
+  },
+  en: {
+    tabs: [
+      "Languages",
+      "Occasion",
+      "Template",
+      "Details",
+      "Date & Venue",
+      "Design",
+      "Extras",
+    ],
+    titles: [
+      "Choose the invitation language",
+      "Choose the occasion",
+      "Choose your template",
+      "Enter your invitation details",
+      "Set your event date and venue",
+      "Customize your design",
+      "Add extra features",
+    ],
+    descs: [
+      "Pick the language your invitation is shown in — the whole form switches to it.",
+      "Choose the occasion to see matching templates.",
+      "",
+      "Add the names and key text that appear inside the invitation.",
+      "Choose the date and time and add the venue so guests know the details.",
+      "Choose colors, fonts and backgrounds that match your taste.",
+      "Enable only the features you need to make the invitation more interactive.",
+    ],
+    prev: "Back",
+    next: "Next",
+    preview: "Preview invitation",
+    showAll: "View all",
+  },
+  fr: {
+    tabs: [
+      "Langues",
+      "Occasion",
+      "Modèle",
+      "Détails",
+      "Date et lieu",
+      "Design",
+      "Options",
+    ],
+    titles: [
+      "Choisissez la langue de l’invitation",
+      "Choisissez l’occasion",
+      "Choisissez votre modèle",
+      "Saisissez les détails de l’invitation",
+      "Définissez la date et le lieu",
+      "Personnalisez votre design",
+      "Ajoutez des fonctionnalités",
+    ],
+    descs: [
+      "Choisissez la langue de votre invitation — tout le formulaire s’y adapte.",
+      "Choisissez l’occasion pour voir les modèles adaptés.",
+      "",
+      "Ajoutez les noms et textes qui apparaîtront dans l’invitation.",
+      "Choisissez la date et l’heure et ajoutez le lieu pour informer vos invités.",
+      "Choisissez les couleurs, polices et fonds selon vos goûts.",
+      "Activez uniquement les fonctionnalités dont vous avez besoin.",
+    ],
+    prev: "Précédent",
+    next: "Suivant",
+    preview: "Aperçu",
+    showAll: "Voir tout",
+  },
+  es: {
+    tabs: [
+      "Idiomas",
+      "Ocasión",
+      "Plantilla",
+      "Detalles",
+      "Fecha y lugar",
+      "Diseño",
+      "Opciones",
+    ],
+    titles: [
+      "Elige el idioma de la invitación",
+      "Elige la ocasión",
+      "Elige tu plantilla",
+      "Introduce los detalles de la invitación",
+      "Define la fecha y el lugar",
+      "Personaliza tu diseño",
+      "Añade funciones adicionales",
+    ],
+    descs: [
+      "Elige el idioma de tu invitación: todo el formulario cambia a él.",
+      "Elige la ocasión para ver plantillas adecuadas.",
+      "",
+      "Añade los nombres y textos que aparecerán en la invitación.",
+      "Elige la fecha y la hora y añade el lugar para informar a tus invitados.",
+      "Elige colores, fuentes y fondos según tu gusto.",
+      "Activa solo las funciones que necesites.",
+    ],
+    prev: "Anterior",
+    next: "Siguiente",
+    preview: "Vista previa",
+    showAll: "Ver todo",
+  },
+  id: {
+    tabs: [
+      "Bahasa",
+      "Acara",
+      "Template",
+      "Detail",
+      "Tanggal & Tempat",
+      "Desain",
+      "Opsi",
+    ],
+    titles: [
+      "Pilih bahasa undangan",
+      "Pilih jenis acara",
+      "Pilih template Anda",
+      "Masukkan detail undangan",
+      "Tentukan tanggal dan tempat",
+      "Sesuaikan desain Anda",
+      "Tambahkan fitur tambahan",
+    ],
+    descs: [
+      "Pilih bahasa tampilan undangan — seluruh formulir akan mengikutinya.",
+      "Pilih jenis acara untuk melihat template yang sesuai.",
+      "",
+      "Tambahkan nama dan teks utama yang tampil di undangan.",
+      "Pilih tanggal dan waktu serta tambahkan lokasi acara.",
+      "Pilih warna, font, dan latar sesuai selera Anda.",
+      "Aktifkan hanya fitur yang Anda butuhkan.",
+    ],
+    prev: "Kembali",
+    next: "Berikutnya",
+    preview: "Pratinjau",
+    showAll: "Lihat semua",
+  },
+  tr: {
+    tabs: [
+      "Diller",
+      "Etkinlik",
+      "Şablon",
+      "Detaylar",
+      "Tarih ve Yer",
+      "Tasarım",
+      "Seçenekler",
+    ],
+    titles: [
+      "Davetiye dilini seçin",
+      "Etkinlik türünü seçin",
+      "Şablonunuzu seçin",
+      "Davetiye bilgilerini girin",
+      "Tarih ve yeri belirleyin",
+      "Tasarımınızı özelleştirin",
+      "Ek özellikler ekleyin",
+    ],
+    descs: [
+      "Davetiyenizin dilini seçin — tüm form o dile geçer.",
+      "Uygun şablonları görmek için etkinlik türünü seçin.",
+      "",
+      "Davetiyede görünecek isimleri ve metinleri ekleyin.",
+      "Tarih ve saati seçin, mekânı ekleyin.",
+      "Zevkinize uygun renk, yazı tipi ve arka planları seçin.",
+      "Yalnızca ihtiyacınız olan özellikleri etkinleştirin.",
+    ],
+    prev: "Geri",
+    next: "İleri",
+    preview: "Önizleme",
+    showAll: "Tümünü gör",
+  },
+};
 
 type FeatureModal = React.ComponentType<{ trigger: React.ReactNode }>;
 
@@ -218,8 +435,7 @@ const DESIGN_BACKGROUNDS = [
 
 export function CreateWizard() {
   const [tab, setTab] = useState(0);
-  const [langs, setLangs] = useState<string[]>(["ar"]);
-  const [primaryLang, setPrimaryLang] = useState("ar");
+  const [lang, setLang] = useState("ar");
   const [event, setEvent] = useState(0);
   const [template, setTemplate] = useState(3);
   const [guests, setGuests] = useState("شخصين");
@@ -233,20 +449,17 @@ export function CreateWizard() {
   const [bg, setBg] = useState(1);
   const [textScale, setTextScale] = useState(1);
 
-  const toggleLang = (code: string) => {
-    const next = langs.includes(code)
-      ? langs.filter((c) => c !== code)
-      : [...langs, code];
-    if (!next.length) return; // keep at least one language
-    setLangs(next);
-    if (!next.includes(primaryLang)) setPrimaryLang(next[0]);
-  };
+  const t = WIZARD_I18N[lang] ?? WIZARD_I18N.ar;
+  const dir = LANGUAGES.find((l) => l.code === lang)?.dir ?? "rtl";
 
   const isFirst = tab === 0;
   const isLast = tab === WIZARD_TABS.length - 1;
 
   return (
-    <div className="flex w-full flex-col rounded-3xl border border-[#d1d5db] bg-card shadow-soft-lg">
+    <div
+      dir={dir}
+      className="flex w-full flex-col rounded-3xl border border-[#d1d5db] bg-card shadow-soft-lg"
+    >
       {/* Tab bar */}
       <div className="flex flex-wrap items-center justify-between gap-1 border-b border-[#d1d5db] px-4 pt-4">
         {WIZARD_TABS.map((label, i) => {
@@ -265,7 +478,7 @@ export function CreateWizard() {
               )}
             >
               <Icon className="size-4" aria-hidden />
-              {label}
+              {t.tabs[i]}
             </button>
           );
         })}
@@ -274,73 +487,38 @@ export function CreateWizard() {
       {/* Tab content */}
       <div className="min-h-[380px] p-6">
         {tab === 0 ? (
-          <StepShell
-            title="اختر لغات الدعوة"
-            desc="اعرض دعوتك بأكثر من لغة، وسيتمكن ضيوفك من التبديل بينها بسهولة."
-          >
-            <div className="flex flex-col gap-6">
-              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {LANGUAGES.map((l) => {
-                  const active = langs.includes(l.code);
-                  return (
-                    <button
-                      key={l.code}
-                      type="button"
-                      onClick={() => toggleLang(l.code)}
-                      className={cn(
-                        "relative flex flex-col items-center gap-1 rounded-2xl border p-5 transition-colors",
-                        active
-                          ? "border-primary bg-rose text-primary"
-                          : "border-[#d1d5db] text-ink-muted hover:border-primary/40",
-                      )}
-                    >
-                      {active ? (
-                        <span className="absolute end-2 top-2 flex size-4 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                          <Check className="size-2.5" aria-hidden />
-                        </span>
-                      ) : null}
-                      <span className="text-base font-bold">{l.label}</span>
-                      <span className="text-xs">{l.sub}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div>
-                <Label>اللغة الأساسية</Label>
-                <p className="mt-1 text-xs text-ink-muted">
-                  اللغة التي تظهر بها الدعوة افتراضياً عند فتحها.
-                </p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {LANGUAGES.filter((l) => langs.includes(l.code)).map((l) => {
-                    const on = primaryLang === l.code;
-                    return (
-                      <button
-                        key={l.code}
-                        type="button"
-                        onClick={() => setPrimaryLang(l.code)}
-                        className={cn(
-                          "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
-                          on
-                            ? "border-primary bg-rose text-primary"
-                            : "border-[#d1d5db] text-ink-muted hover:border-primary/40",
-                        )}
-                      >
-                        {l.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+          <StepShell title={t.titles[0]} desc={t.descs[0]}>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {LANGUAGES.map((l) => {
+                const active = lang === l.code;
+                return (
+                  <button
+                    key={l.code}
+                    type="button"
+                    onClick={() => setLang(l.code)}
+                    className={cn(
+                      "relative flex flex-col items-center gap-1 rounded-2xl border p-5 transition-colors",
+                      active
+                        ? "border-primary bg-rose text-primary"
+                        : "border-[#d1d5db] text-ink-muted hover:border-primary/40",
+                    )}
+                  >
+                    {active ? (
+                      <span className="absolute end-2 top-2 flex size-4 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                        <Check className="size-2.5" aria-hidden />
+                      </span>
+                    ) : null}
+                    <span className="text-base font-bold">{l.label}</span>
+                    <span className="text-xs">{l.sub}</span>
+                  </button>
+                );
+              })}
             </div>
           </StepShell>
         ) : null}
 
         {tab === 1 ? (
-          <StepShell
-            title="اختر نوع المناسبة"
-            desc="اختر نوع المناسبة لتظهر لك القوالب المناسبة."
-          >
+          <StepShell title={t.titles[1]} desc={t.descs[1]}>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
               {EVENT_TYPES.map((type, i) => {
                 const Icon = EVENT_ICONS[type.icon] ?? Sparkles;
@@ -373,10 +551,10 @@ export function CreateWizard() {
 
         {tab === 2 ? (
           <StepShell
-            title="اختر قالب دعوتك"
+            title={t.titles[2]}
             action={
               <button className="text-sm font-medium text-primary">
-                عرض الكل
+                {t.showAll}
               </button>
             }
           >
@@ -425,10 +603,7 @@ export function CreateWizard() {
         ) : null}
 
         {tab === 3 ? (
-          <StepShell
-            title="أدخل تفاصيل دعوتك"
-            desc="أضف الأسماء والنصوص الأساسية التي ستظهر داخل الدعوة."
-          >
+          <StepShell title={t.titles[3]} desc={t.descs[3]}>
             <div className="flex flex-col gap-5">
               {/* Reassurance banner */}
               <div className="flex items-center gap-2.5 rounded-2xl border border-primary/10 bg-rose/50 px-4 py-3.5 text-sm text-ink-muted">
@@ -506,10 +681,7 @@ export function CreateWizard() {
         ) : null}
 
         {tab === 4 ? (
-          <StepShell
-            title="حدد تاريخ ومكان مناسبتك"
-            desc="اختر التاريخ والوقت وأضف موقع الحفل ليتعرف ضيوفك على التفاصيل بسهولة."
-          >
+          <StepShell title={t.titles[4]} desc={t.descs[4]}>
             <div className="flex flex-col gap-6">
               {/* Date + start/end time */}
               <div className="grid gap-4 sm:grid-cols-3">
@@ -612,10 +784,7 @@ export function CreateWizard() {
         ) : null}
 
         {tab === 5 ? (
-          <StepShell
-            title="خصص تصميم دعوتك"
-            desc="اختر الألوان والخطوط والخلفيات التي تعكس ذوقك وتناسب مناسبتك."
-          >
+          <StepShell title={t.titles[5]} desc={t.descs[5]}>
             <div className="flex flex-col gap-7">
               {/* Live-preview hint */}
               <div className="flex items-center gap-2.5 rounded-2xl border border-primary/10 bg-rose/50 px-4 py-3.5 text-sm text-ink-muted">
@@ -793,10 +962,7 @@ export function CreateWizard() {
         ) : null}
 
         {tab === 6 ? (
-          <StepShell
-            title="خصص مميزات إضافية لدعوتك"
-            desc="فعّل الميزات التي تحتاجها فقط لتجعل الدعوة أكثر تفاعلاً وملاءمة لضيوفك."
-          >
+          <StepShell title={t.titles[6]} desc={t.descs[6]}>
             <div className="grid gap-4 sm:grid-cols-2">
               {FEATURES.map((f, i) => {
                 const on = featureOn[i];
@@ -870,13 +1036,13 @@ export function CreateWizard() {
           className="h-[50px] w-[150px] rounded-[8px] border-[#d1d5db]"
         >
           <ArrowRight className="size-4" aria-hidden />
-          السابق
+          {t.prev}
         </Button>
         <Button
           onClick={() => setTab((t) => Math.min(WIZARD_TABS.length - 1, t + 1))}
           className="h-[50px] w-[150px] rounded-[8px] shadow-brand"
         >
-          {isLast ? "معاينة الدعوة" : "التالي"}
+          {isLast ? t.preview : t.next}
           <ArrowLeft className="size-4" aria-hidden />
         </Button>
       </div>

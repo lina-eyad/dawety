@@ -16,6 +16,7 @@ import {
   Hand,
   Heart,
   Images,
+  Languages,
   Lightbulb,
   MapPin,
   MessageCircle,
@@ -70,7 +71,17 @@ const EVENT_ICONS: Record<string, typeof Heart> = {
   sparkles: Sparkles,
 };
 
-const TAB_ICONS = [Heart, Palette, Wand2, MapPin, Palette, Sparkles];
+const TAB_ICONS = [Languages, Heart, Palette, Wand2, MapPin, Palette, Sparkles];
+
+/** Languages the invitation can be shown in (guests can switch between them). */
+const LANGUAGES = [
+  { code: "ar", label: "العربية", sub: "Arabic" },
+  { code: "en", label: "English", sub: "الإنجليزية" },
+  { code: "fr", label: "Français", sub: "الفرنسية" },
+  { code: "tr", label: "Türkçe", sub: "التركية" },
+  { code: "ur", label: "اردو", sub: "الأردية" },
+  { code: "es", label: "Español", sub: "الإسبانية" },
+];
 
 type FeatureModal = React.ComponentType<{ trigger: React.ReactNode }>;
 
@@ -207,6 +218,8 @@ const DESIGN_BACKGROUNDS = [
 
 export function CreateWizard() {
   const [tab, setTab] = useState(0);
+  const [langs, setLangs] = useState<string[]>(["ar"]);
+  const [primaryLang, setPrimaryLang] = useState("ar");
   const [event, setEvent] = useState(0);
   const [template, setTemplate] = useState(3);
   const [guests, setGuests] = useState("شخصين");
@@ -219,6 +232,15 @@ export function CreateWizard() {
   const [font, setFont] = useState(0);
   const [bg, setBg] = useState(1);
   const [textScale, setTextScale] = useState(1);
+
+  const toggleLang = (code: string) => {
+    const next = langs.includes(code)
+      ? langs.filter((c) => c !== code)
+      : [...langs, code];
+    if (!next.length) return; // keep at least one language
+    setLangs(next);
+    if (!next.includes(primaryLang)) setPrimaryLang(next[0]);
+  };
 
   const isFirst = tab === 0;
   const isLast = tab === WIZARD_TABS.length - 1;
@@ -253,6 +275,69 @@ export function CreateWizard() {
       <div className="min-h-[380px] p-6">
         {tab === 0 ? (
           <StepShell
+            title="اختر لغات الدعوة"
+            desc="اعرض دعوتك بأكثر من لغة، وسيتمكن ضيوفك من التبديل بينها بسهولة."
+          >
+            <div className="flex flex-col gap-6">
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {LANGUAGES.map((l) => {
+                  const active = langs.includes(l.code);
+                  return (
+                    <button
+                      key={l.code}
+                      type="button"
+                      onClick={() => toggleLang(l.code)}
+                      className={cn(
+                        "relative flex flex-col items-center gap-1 rounded-2xl border p-5 transition-colors",
+                        active
+                          ? "border-primary bg-rose text-primary"
+                          : "border-[#d1d5db] text-ink-muted hover:border-primary/40",
+                      )}
+                    >
+                      {active ? (
+                        <span className="absolute end-2 top-2 flex size-4 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                          <Check className="size-2.5" aria-hidden />
+                        </span>
+                      ) : null}
+                      <span className="text-base font-bold">{l.label}</span>
+                      <span className="text-xs">{l.sub}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div>
+                <Label>اللغة الأساسية</Label>
+                <p className="mt-1 text-xs text-ink-muted">
+                  اللغة التي تظهر بها الدعوة افتراضياً عند فتحها.
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {LANGUAGES.filter((l) => langs.includes(l.code)).map((l) => {
+                    const on = primaryLang === l.code;
+                    return (
+                      <button
+                        key={l.code}
+                        type="button"
+                        onClick={() => setPrimaryLang(l.code)}
+                        className={cn(
+                          "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
+                          on
+                            ? "border-primary bg-rose text-primary"
+                            : "border-[#d1d5db] text-ink-muted hover:border-primary/40",
+                        )}
+                      >
+                        {l.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </StepShell>
+        ) : null}
+
+        {tab === 1 ? (
+          <StepShell
             title="اختر نوع المناسبة"
             desc="اختر نوع المناسبة لتظهر لك القوالب المناسبة."
           >
@@ -286,7 +371,7 @@ export function CreateWizard() {
           </StepShell>
         ) : null}
 
-        {tab === 1 ? (
+        {tab === 2 ? (
           <StepShell
             title="اختر قالب دعوتك"
             action={
@@ -339,7 +424,7 @@ export function CreateWizard() {
           </StepShell>
         ) : null}
 
-        {tab === 2 ? (
+        {tab === 3 ? (
           <StepShell
             title="أدخل تفاصيل دعوتك"
             desc="أضف الأسماء والنصوص الأساسية التي ستظهر داخل الدعوة."
@@ -420,7 +505,7 @@ export function CreateWizard() {
           </StepShell>
         ) : null}
 
-        {tab === 3 ? (
+        {tab === 4 ? (
           <StepShell
             title="حدد تاريخ ومكان مناسبتك"
             desc="اختر التاريخ والوقت وأضف موقع الحفل ليتعرف ضيوفك على التفاصيل بسهولة."
@@ -526,7 +611,7 @@ export function CreateWizard() {
           </StepShell>
         ) : null}
 
-        {tab === 4 ? (
+        {tab === 5 ? (
           <StepShell
             title="خصص تصميم دعوتك"
             desc="اختر الألوان والخطوط والخلفيات التي تعكس ذوقك وتناسب مناسبتك."
@@ -707,7 +792,7 @@ export function CreateWizard() {
           </StepShell>
         ) : null}
 
-        {tab === 5 ? (
+        {tab === 6 ? (
           <StepShell
             title="خصص مميزات إضافية لدعوتك"
             desc="فعّل الميزات التي تحتاجها فقط لتجعل الدعوة أكثر تفاعلاً وملاءمة لضيوفك."

@@ -10,6 +10,7 @@ export const STAGES = [
 
 /** Inner tabs of the "التصميم" stage. */
 export const WIZARD_TABS = [
+  "اللغات",
   "نوع المناسبة",
   "القالب",
   "التفاصيل",

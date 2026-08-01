@@ -158,7 +158,7 @@ export function RsvpModal({ trigger }: { trigger: ReactNode }) {
         </DialogHeader>
 
         {/* Master enable */}
-        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
+        <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
           <span>
             <span className="block text-sm font-medium text-ink">
               تفعيل تأكيد الحضور
@@ -325,7 +325,7 @@ export function ContactModal({ trigger }: { trigger: ReactNode }) {
         </DialogHeader>
 
         {/* Master enable */}
-        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
+        <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
           <span>
             <span className="block text-sm font-medium text-ink">
               تفعيل معلومات التواصل
@@ -483,7 +483,7 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
         </DialogHeader>
 
         {/* Master enable */}
-        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
+        <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
           <span>
             <span className="block text-sm font-medium text-ink">
               تفعيل معرض الصور
@@ -659,7 +659,7 @@ export function NotesModal({ trigger }: { trigger: ReactNode }) {
         </DialogHeader>
 
         {/* Master enable */}
-        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
+        <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
           <span>
             <span className="block text-sm font-medium text-ink">
               تفعيل الرسالة والملاحظات
@@ -806,7 +806,7 @@ export function ProgramModal({ trigger }: { trigger: ReactNode }) {
         </DialogHeader>
 
         {/* Master enable */}
-        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
+        <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl bg-rose/50 p-4">
           <span>
             <span className="block text-sm font-medium text-ink">
               عرض برنامج الحفل داخل الدعوة

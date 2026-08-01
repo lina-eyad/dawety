@@ -41,8 +41,20 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+
+/** Dialog body wrapper: caps height and scrolls the content via a styled bar. */
+function ModalShell({ children }: { children: ReactNode }) {
+  return (
+    <DialogContent className="max-h-[85vh] gap-0 overflow-hidden p-0 sm:max-w-lg">
+      <ScrollArea className="max-h-[85vh]">
+        <div className="flex flex-col p-4">{children}</div>
+      </ScrollArea>
+    </DialogContent>
+  );
+}
 
 /** Icon + title/desc row with a trailing pill switch — used for form options. */
 function ToggleRow({
@@ -128,7 +140,7 @@ export function RsvpModal({ trigger }: { trigger: ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto sm:max-w-lg">
+      <ModalShell>
         <DialogHeader>
           <div className="flex items-start gap-3 text-start">
             <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-rose text-primary">
@@ -273,7 +285,7 @@ export function RsvpModal({ trigger }: { trigger: ReactNode }) {
             <Button variant="secondary">إلغاء</Button>
           </DialogClose>
         </DialogFooter>
-      </DialogContent>
+      </ModalShell>
     </Dialog>
   );
 }
@@ -295,7 +307,7 @@ export function ContactModal({ trigger }: { trigger: ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto sm:max-w-lg">
+      <ModalShell>
         <DialogHeader>
           <div className="flex items-start gap-3 text-start">
             <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-rose text-primary">
@@ -438,7 +450,7 @@ export function ContactModal({ trigger }: { trigger: ReactNode }) {
             <Button variant="secondary">إلغاء</Button>
           </DialogClose>
         </DialogFooter>
-      </DialogContent>
+      </ModalShell>
     </Dialog>
   );
 }
@@ -453,7 +465,7 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto sm:max-w-lg">
+      <ModalShell>
         <DialogHeader>
           <div className="flex items-start gap-3 text-start">
             <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-rose text-primary">
@@ -608,7 +620,7 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
             <Button variant="secondary">إلغاء</Button>
           </DialogClose>
         </DialogFooter>
-      </DialogContent>
+      </ModalShell>
     </Dialog>
   );
 }
@@ -629,7 +641,7 @@ export function NotesModal({ trigger }: { trigger: ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto sm:max-w-lg">
+      <ModalShell>
         <DialogHeader>
           <div className="flex items-start gap-3 text-start">
             <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-rose text-primary">
@@ -755,7 +767,7 @@ export function NotesModal({ trigger }: { trigger: ReactNode }) {
             <Button variant="secondary">إلغاء</Button>
           </DialogClose>
         </DialogFooter>
-      </DialogContent>
+      </ModalShell>
     </Dialog>
   );
 }
@@ -776,7 +788,7 @@ export function ProgramModal({ trigger }: { trigger: ReactNode }) {
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-h-[85vh] gap-0 overflow-y-auto sm:max-w-lg">
+      <ModalShell>
         <DialogHeader>
           <div className="flex items-start gap-3 text-start">
             <span className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-rose text-primary">
@@ -898,7 +910,7 @@ export function ProgramModal({ trigger }: { trigger: ReactNode }) {
             <Button variant="secondary">إلغاء</Button>
           </DialogClose>
         </DialogFooter>
-      </DialogContent>
+      </ModalShell>
     </Dialog>
   );
 }

@@ -41,6 +41,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
@@ -366,6 +367,15 @@ const NAMED_BY = [
 const FIELD_CLASS =
   "h-[50px] rounded-[12px] border-[#e5e7eb] bg-[#f9fafb] px-4";
 
+/** Half-hour time slots, Arabic 12-hour (e.g. "07:00 مساءً"), for the pickers. */
+const TIME_SLOTS = Array.from({ length: 48 }, (_, i) => {
+  const h24 = Math.floor(i / 2);
+  const minute = i % 2 === 0 ? "00" : "30";
+  const period = h24 < 12 ? "صباحًا" : "مساءً";
+  const h12 = h24 % 12 === 0 ? 12 : h24 % 12;
+  return `${String(h12).padStart(2, "0")}:${minute} ${period}`;
+});
+
 /** Arabic Gregorian long date with Latin digits, e.g. "الجمعة، 20 يونيو 2025". */
 function formatEventDate(d: Date) {
   return new Intl.DateTimeFormat("ar", {
@@ -443,6 +453,8 @@ export function CreateWizard() {
   const [eventDate, setEventDate] = useState<Date | undefined>(
     new Date(2025, 5, 20),
   );
+  const [startTime, setStartTime] = useState("07:00 مساءً");
+  const [endTime, setEndTime] = useState("11:00 مساءً");
   const [featureOn, setFeatureOn] = useState(() => FEATURES.map((f) => f.on));
   const [color, setColor] = useState("#9e0d3d");
   const [font, setFont] = useState(0);
@@ -721,17 +733,15 @@ export function CreateWizard() {
                     </PopoverContent>
                   </Popover>
                 </div>
-                <PickerField
+                <TimeField
                   label="وقت البداية"
-                  value="07:00 مساءً"
-                  Icon={Clock}
-                  chevron
+                  value={startTime}
+                  onChange={setStartTime}
                 />
-                <PickerField
+                <TimeField
                   label="وقت النهاية"
-                  value="11:00 مساءً"
-                  Icon={Clock}
-                  chevron
+                  value={endTime}
+                  onChange={setEndTime}
                 />
               </div>
 
@@ -1085,27 +1095,62 @@ function Field({ label, value }: { label: string; value: string }) {
 }
 
 /** Read-only date/time picker field — leading icon, optional trailing chevron. */
-function PickerField({
+/** Time picker — a popover with a scrollable list of half-hour slots. */
+function TimeField({
   label,
   value,
-  Icon,
-  chevron,
+  onChange,
 }: {
   label: string;
   value: string;
-  Icon: typeof Clock;
-  chevron?: boolean;
+  onChange: (v: string) => void;
 }) {
+  const [open, setOpen] = useState(false);
   return (
     <div className="flex flex-col gap-1.5">
       <Label>{label}</Label>
-      <div className="flex h-[50px] items-center gap-2 rounded-[12px] border border-[#e5e7eb] bg-[#f9fafb] px-4 text-sm text-ink">
-        <Icon className="size-4 shrink-0 text-ink-muted" aria-hidden />
-        <span className="flex-1 truncate">{value}</span>
-        {chevron ? (
-          <ChevronDown className="size-4 shrink-0 text-ink-muted" aria-hidden />
-        ) : null}
-      </div>
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            className="flex h-[50px] items-center gap-2 rounded-[12px] border border-[#e5e7eb] bg-[#f9fafb] px-4 text-sm text-ink"
+          >
+            <Clock className="size-4 shrink-0 text-ink-muted" aria-hidden />
+            <span className="flex-1 text-start">{value}</span>
+            <ChevronDown
+              className="size-4 shrink-0 text-ink-muted"
+              aria-hidden
+            />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="start"
+          className="w-(--radix-popover-trigger-width) bg-card p-0"
+        >
+          <ScrollArea className="h-64">
+            <div className="flex flex-col p-1">
+              {TIME_SLOTS.map((slot) => (
+                <button
+                  key={slot}
+                  type="button"
+                  onClick={() => {
+                    onChange(slot);
+                    setOpen(false);
+                  }}
+                  className={cn(
+                    "rounded-lg px-3 py-2 text-start text-sm transition-colors",
+                    value === slot
+                      ? "bg-primary font-medium text-primary-foreground"
+                      : "text-ink hover:bg-rose",
+                  )}
+                >
+                  {slot}
+                </button>
+              ))}
+            </div>
+          </ScrollArea>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }

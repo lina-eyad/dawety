@@ -15,11 +15,16 @@ export type CalendarProps = ComponentProps<typeof DayPicker>;
  * overrides on `.dawety-rdp` (see globals.css). Arabic + RTL by default.
  */
 export function Calendar({ className, ...props }: CalendarProps) {
+  const now = new Date();
   return (
     <DayPicker
       locale={arSA}
       dir="rtl"
       showOutsideDays
+      // Month + year dropdowns so the year is directly selectable.
+      captionLayout="dropdown"
+      startMonth={new Date(now.getFullYear() - 5, 0)}
+      endMonth={new Date(now.getFullYear() + 10, 11)}
       className={cn("dawety-rdp", className)}
       {...props}
     />

@@ -239,3 +239,46 @@
   background-color: var(--rose);
   border-radius: 10px;
 }
+/* Month/year dropdowns (captionLayout="dropdown"). */
+.dawety-rdp .rdp-dropdowns {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.dawety-rdp .rdp-dropdown_root {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.dawety-rdp .rdp-dropdown {
+  appearance: none;
+  cursor: pointer;
+  border: 1px solid var(--warm-border);
+  background-color: var(--card);
+  color: var(--ink);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.875rem;
+  border-radius: 8px;
+  padding-block: 0.35rem;
+  padding-inline: 0.6rem 1.6rem;
+}
+.dawety-rdp .rdp-dropdown:hover {
+  border-color: color-mix(in oklch, var(--primary) 40%, transparent);
+}
+.dawety-rdp .rdp-dropdown:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--primary) 20%, transparent);
+}
+.dawety-rdp .rdp-dropdown_root::after {
+  content: "";
+  position: absolute;
+  inset-inline-end: 0.55rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-inline-start: 1.5px solid var(--ink-muted);
+  border-bottom: 1.5px solid var(--ink-muted);
+  transform: rotate(-45deg);
+  pointer-events: none;
+}

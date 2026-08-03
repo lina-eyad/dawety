@@ -13,6 +13,7 @@ export const ROUTES = {
   create: "/create",
   preview: "/preview",
   checkout: "/checkout",
+  share: "/share",
   login: "/login",
   register: "/register",
   dashboard: "/dashboard",

@@ -5,6 +5,8 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { ROUTES } from "@/constants/routes";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
 const PLAN_INCLUDES = [
@@ -98,11 +100,11 @@ export function CheckoutCard() {
             {total}
           </span>
         </div>
-        <Button size="lg" className="w-full shadow-brand">
-          الدفع ونشر الدعوة
+        <Button size="lg" className="w-full shadow-brand" asChild>
+          <Link href={ROUTES.share}>الدفع ونشر الدعوة</Link>
         </Button>
-        <Button variant="secondary" className="w-full">
-          العودة للمعاينة
+        <Button variant="secondary" className="w-full" asChild>
+          <Link href={ROUTES.preview}>العودة للمعاينة</Link>
         </Button>
         <p className="flex items-center justify-center gap-1.5 text-xs text-ink-muted">
           <Lock className="size-3.5" aria-hidden />

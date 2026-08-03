@@ -32,6 +32,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
+import { ROUTES } from "@/constants/routes";
+import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { Calendar as CalendarPicker } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
@@ -472,6 +474,7 @@ export function CreateWizard() {
   const t = WIZARD_I18N[lang] ?? WIZARD_I18N.ar;
   const dir = LANGUAGES.find((l) => l.code === lang)?.dir ?? "rtl";
 
+  const router = useRouter();
   const isFirst = tab === 0;
   const isLast = tab === WIZARD_TABS.length - 1;
 
@@ -1097,7 +1100,9 @@ export function CreateWizard() {
             </Button>
             <Button
               onClick={() =>
-                setTab((t) => Math.min(WIZARD_TABS.length - 1, t + 1))
+                isLast
+                  ? router.push(ROUTES.preview)
+                  : setTab((prev) => Math.min(WIZARD_TABS.length - 1, prev + 1))
               }
               className="h-[50px] w-[150px] rounded-[8px] shadow-brand"
             >

@@ -1,7 +1,9 @@
-import { Smartphone } from "lucide-react";
+import { ArrowLeft, Smartphone } from "lucide-react";
 import { setRequestLocale } from "next-intl/server";
 
 import { Button } from "@/components/ui/button";
+import { ROUTES } from "@/constants/routes";
+import { Link } from "@/i18n/navigation";
 import { PhonePreview } from "@/features/create/components/phone-preview";
 import { WizardStepper } from "@/features/create/components/wizard-stepper";
 import { MarketingNavbar } from "@/features/marketing";
@@ -36,10 +38,26 @@ export default async function PreviewPage({
             </p>
           </div>
           <PhonePreview />
-          <Button size="lg" className="shadow-brand">
-            <Smartphone className="size-4" aria-hidden />
-            فتح المعاينة الكاملة
-          </Button>
+          <div className="flex w-full flex-col items-center gap-3">
+            <Button
+              size="lg"
+              className="h-[50px] w-full max-w-xs rounded-[8px] shadow-brand"
+              asChild
+            >
+              <Link href={ROUTES.checkout}>
+                المتابعة للدفع
+                <ArrowLeft className="size-4" aria-hidden />
+              </Link>
+            </Button>
+            <Button
+              size="lg"
+              variant="secondary"
+              className="h-[50px] w-full max-w-xs rounded-[8px]"
+            >
+              <Smartphone className="size-4" aria-hidden />
+              فتح المعاينة الكاملة
+            </Button>
+          </div>
           <p className="text-sm text-ink-muted">
             افتحها على هاتفك للتأكد من الشكل قبل المتابعة.
           </p>

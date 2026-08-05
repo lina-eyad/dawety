@@ -1,9 +1,18 @@
 "use client";
 
 import { Check, Copy, QrCode } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { ROUTES } from "@/constants/routes";
 import { Link } from "@/i18n/navigation";
 
@@ -76,13 +85,41 @@ export function ShareCard() {
             مشاركة عبر واتساب
           </a>
         </Button>
-        <Button
-          variant="outline"
-          className="h-[50px] rounded-[8px] border-primary text-primary"
-        >
-          <QrCode className="size-4" aria-hidden />
-          رمز QR
-        </Button>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              className="h-[50px] rounded-[8px] border-primary text-primary"
+            >
+              <QrCode className="size-4" aria-hidden />
+              رمز QR
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-sm">
+            <DialogHeader className="items-center text-center">
+              <DialogTitle className="text-lg font-bold text-ink">
+                رمز QR للدعوة
+              </DialogTitle>
+              <DialogDescription className="text-ink-muted">
+                وجّه كاميرا هاتفك نحو الرمز لفتح الدعوة.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="mt-4 flex flex-col items-center gap-4">
+              <div className="rounded-2xl border border-warm-border bg-white p-4">
+                <QRCodeSVG
+                  value={INVITE_URL}
+                  size={200}
+                  fgColor="#9e0d3d"
+                  bgColor="#ffffff"
+                  level="M"
+                />
+              </div>
+              <span className="text-xs text-ink-muted" dir="ltr">
+                {INVITE_URL}
+              </span>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <Link

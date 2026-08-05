@@ -1,17 +1,28 @@
+"use client";
+
 import { Check } from "lucide-react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/constants/routes";
 import { Link } from "@/i18n/navigation";
+import { cn } from "@/lib/utils";
 
 import { FREE_FEATURES, PLAN_FEATURES } from "../content";
 import { Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
 
-const CURRENCIES = ["USD", "SAR", "GBP"] as const;
+const CURRENCIES = [
+  { code: "USD", symbol: "$", price: "9.99" },
+  { code: "SAR", symbol: "ر.س", price: "37" },
+  { code: "GBP", symbol: "£", price: "7.99" },
+] as const;
 
 /** "صمّم مجانًا، وانشر عندما تكون جاهزًا" — complete vs free-trial plans. */
 export function PricingSection() {
+  const [currency, setCurrency] = useState(0);
+  const cur = CURRENCIES[currency];
+
   return (
     <section
       id="pricing"
@@ -40,23 +51,27 @@ export function PricingSection() {
             </div>
             <div className="flex overflow-hidden rounded-full border border-warm-border text-xs">
               {CURRENCIES.map((c, i) => (
-                <span
-                  key={c}
-                  className={
-                    i === 0
-                      ? "bg-primary px-3 py-1.5 text-primary-foreground"
-                      : "px-3 py-1.5 text-ink-muted"
-                  }
+                <button
+                  key={c.code}
+                  type="button"
+                  onClick={() => setCurrency(i)}
+                  aria-pressed={i === currency}
+                  className={cn(
+                    "px-3 py-1.5 transition-colors",
+                    i === currency
+                      ? "bg-primary text-primary-foreground"
+                      : "text-ink-muted hover:text-primary",
+                  )}
                 >
-                  {c}
-                </span>
+                  {c.code}
+                </button>
               ))}
             </div>
           </div>
 
           <div className="flex items-end gap-1">
-            <span className="text-5xl font-bold text-ink">9.99</span>
-            <span className="mb-2 text-lg text-ink-muted">$</span>
+            <span className="text-5xl font-bold text-ink">{cur.price}</span>
+            <span className="mb-2 text-lg text-ink-muted">{cur.symbol}</span>
             <span className="ms-2 mb-2 text-ink-muted">
               دفعة واحدة لكل دعوة
             </span>

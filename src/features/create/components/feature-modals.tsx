@@ -45,6 +45,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
+import { useInvitation, type InvitationState } from "../invitation-store";
+
 /** Dialog body wrapper: caps height and scrolls the content via a styled bar. */
 function ModalShell({ children }: { children: ReactNode }) {
   return (
@@ -128,14 +130,11 @@ function Stepper({
 }
 
 export function RsvpModal({ trigger }: { trigger: ReactNode }) {
-  const [enabled, setEnabled] = useState(true);
-  const [companions, setCompanions] = useState(true);
-  const [guestMsg, setGuestMsg] = useState(true);
-  const [meal, setMeal] = useState(false);
-  const [maxCompanions, setMaxCompanions] = useState(2);
-  const [thanks, setThanks] = useState(
-    "شكرًا لتأكيد حضوركم، سعداء بمشاركتكم فرحتنا.",
-  );
+  const inv = useInvitation();
+  const enabled = inv.features.rsvp;
+  const c = inv.rsvp;
+  const setC = (p: Partial<InvitationState["rsvp"]>) =>
+    inv.set((s) => ({ rsvp: { ...s.rsvp, ...p } }));
 
   return (
     <Dialog>
@@ -169,7 +168,7 @@ export function RsvpModal({ trigger }: { trigger: ReactNode }) {
           </span>
           <Switch
             checked={enabled}
-            onClick={() => setEnabled((v) => !v)}
+            onClick={() => inv.toggleFeature("rsvp")}
             label="تفعيل تأكيد الحضور"
           />
         </div>
@@ -211,17 +210,17 @@ export function RsvpModal({ trigger }: { trigger: ReactNode }) {
                 Icon={Users}
                 title="عدد المرافقين"
                 desc="اسمح للضيف بتحديد عدد الأشخاص القادمين معه"
-                checked={companions}
-                onToggle={() => setCompanions((v) => !v)}
+                checked={c.companions}
+                onToggle={() => setC({ companions: !c.companions })}
               />
-              {companions ? (
+              {c.companions ? (
                 <div className="flex items-center justify-between gap-3 rounded-2xl border border-dashed border-[#e5e7eb] px-4 py-3">
                   <span className="text-sm text-ink">
                     الحد الأقصى للمرافقين
                   </span>
                   <Stepper
-                    value={maxCompanions}
-                    setValue={setMaxCompanions}
+                    value={c.maxCompanions}
+                    setValue={(n) => setC({ maxCompanions: n })}
                     min={0}
                     max={10}
                   />
@@ -232,15 +231,15 @@ export function RsvpModal({ trigger }: { trigger: ReactNode }) {
                 Icon={MessageSquare}
                 title="رسالة من الضيف"
                 desc="اسمح بإرسال تهنئة أو ملاحظة قصيرة"
-                checked={guestMsg}
-                onToggle={() => setGuestMsg((v) => !v)}
+                checked={c.guestMsg}
+                onToggle={() => setC({ guestMsg: !c.guestMsg })}
               />
               <ToggleRow
                 Icon={Utensils}
                 title="تفضيل الوجبة"
                 desc="اسمح للضيف باختيار نوع الطعام المفضل"
-                checked={meal}
-                onToggle={() => setMeal((v) => !v)}
+                checked={c.meal}
+                onToggle={() => setC({ meal: !c.meal })}
               />
             </div>
           </div>
@@ -266,14 +265,14 @@ export function RsvpModal({ trigger }: { trigger: ReactNode }) {
             <div className="flex items-center justify-between">
               <Label className="mb-0">رسالة الشكر بعد التأكيد</Label>
               <span className="text-xs text-ink-muted" dir="ltr">
-                {thanks.length}/120
+                {c.thanks.length}/120
               </span>
             </div>
             <textarea
               rows={2}
               maxLength={120}
-              value={thanks}
-              onChange={(e) => setThanks(e.target.value)}
+              value={c.thanks}
+              onChange={(e) => setC({ thanks: e.target.value })}
               className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] px-4 py-3 text-sm leading-relaxed outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
             />
           </div>
@@ -291,13 +290,18 @@ export function RsvpModal({ trigger }: { trigger: ReactNode }) {
 }
 
 export function ContactModal({ trigger }: { trigger: ReactNode }) {
-  const [enabled, setEnabled] = useState(true);
-  const [whatsapp, setWhatsapp] = useState(true);
-  const [phone, setPhone] = useState(false);
-  const [email, setEmail] = useState(false);
-  const [waMessage, setWaMessage] = useState(
-    "مرحبًا، لديّ استفسار بخصوص الدعوة.",
-  );
+  const inv = useInvitation();
+  const enabled = inv.features.contact;
+  const c = inv.contact;
+  const setC = (p: Partial<InvitationState["contact"]>) =>
+    inv.set((s) => ({ contact: { ...s.contact, ...p } }));
+  const setCh = (
+    ch: "whatsapp" | "phone" | "email",
+    p: Partial<{ enabled: boolean; value: string }>,
+  ) =>
+    inv.set((s) => ({
+      contact: { ...s.contact, [ch]: { ...s.contact[ch], ...p } },
+    }));
 
   const field = "h-[50px] rounded-[12px] border-[#e5e7eb] bg-[#f9fafb] px-4";
   const prefix =
@@ -336,7 +340,7 @@ export function ContactModal({ trigger }: { trigger: ReactNode }) {
           </span>
           <Switch
             checked={enabled}
-            onClick={() => setEnabled((v) => !v)}
+            onClick={() => inv.toggleFeature("contact")}
             label="تفعيل معلومات التواصل"
           />
         </div>
@@ -352,6 +356,8 @@ export function ContactModal({ trigger }: { trigger: ReactNode }) {
           <div className="flex flex-col gap-1.5">
             <Label>اسم جهة التواصل</Label>
             <Input
+              value={c.name}
+              onChange={(e) => setC({ name: e.target.value })}
               placeholder="مثال: أحمد / منسّقة الحفل / والد العروس"
               className={field}
             />
@@ -366,14 +372,20 @@ export function ContactModal({ trigger }: { trigger: ReactNode }) {
                 Icon={MessageSquare}
                 title="واتساب"
                 desc="زر محادثة مباشرة عبر واتساب"
-                checked={whatsapp}
-                onToggle={() => setWhatsapp((v) => !v)}
+                checked={c.whatsapp.enabled}
+                onToggle={() =>
+                  setCh("whatsapp", { enabled: !c.whatsapp.enabled })
+                }
               />
-              {whatsapp ? (
+              {c.whatsapp.enabled ? (
                 <div className={cn(reveal, "flex flex-col gap-2")}>
                   <div className="flex gap-2" dir="ltr">
                     <span className={prefix}>+966</span>
                     <Input
+                      value={c.whatsapp.value}
+                      onChange={(e) =>
+                        setCh("whatsapp", { value: e.target.value })
+                      }
                       placeholder="5XXXXXXXX"
                       className={cn(field, "flex-1")}
                     />
@@ -384,14 +396,14 @@ export function ContactModal({ trigger }: { trigger: ReactNode }) {
                         رسالة جاهزة (اختياري)
                       </span>
                       <span className="text-xs text-ink-muted" dir="ltr">
-                        {waMessage.length}/120
+                        {c.waMessage.length}/120
                       </span>
                     </div>
                     <textarea
                       rows={2}
                       maxLength={120}
-                      value={waMessage}
-                      onChange={(e) => setWaMessage(e.target.value)}
+                      value={c.waMessage}
+                      onChange={(e) => setC({ waMessage: e.target.value })}
                       className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] px-4 py-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
                     />
                   </div>
@@ -403,13 +415,15 @@ export function ContactModal({ trigger }: { trigger: ReactNode }) {
                 Icon={Phone}
                 title="مكالمة هاتفية"
                 desc="زر اتصال مباشر"
-                checked={phone}
-                onToggle={() => setPhone((v) => !v)}
+                checked={c.phone.enabled}
+                onToggle={() => setCh("phone", { enabled: !c.phone.enabled })}
               />
-              {phone ? (
+              {c.phone.enabled ? (
                 <div className={cn(reveal, "flex gap-2")} dir="ltr">
                   <span className={prefix}>+966</span>
                   <Input
+                    value={c.phone.value}
+                    onChange={(e) => setCh("phone", { value: e.target.value })}
                     placeholder="5XXXXXXXX"
                     className={cn(field, "flex-1")}
                   />
@@ -421,14 +435,16 @@ export function ContactModal({ trigger }: { trigger: ReactNode }) {
                 Icon={Mail}
                 title="البريد الإلكتروني"
                 desc="راسلنا عبر البريد"
-                checked={email}
-                onToggle={() => setEmail((v) => !v)}
+                checked={c.email.enabled}
+                onToggle={() => setCh("email", { enabled: !c.email.enabled })}
               />
-              {email ? (
+              {c.email.enabled ? (
                 <div className={reveal}>
                   <Input
                     type="email"
                     dir="ltr"
+                    value={c.email.value}
+                    onChange={(e) => setCh("email", { value: e.target.value })}
                     placeholder="name@example.com"
                     className={cn(field, "w-full")}
                   />
@@ -440,7 +456,11 @@ export function ContactModal({ trigger }: { trigger: ReactNode }) {
           {/* Button label */}
           <div className="flex flex-col gap-1.5">
             <Label>نص زر التواصل داخل الدعوة</Label>
-            <Input defaultValue="تواصل معنا" className={field} />
+            <Input
+              value={c.buttonLabel}
+              onChange={(e) => setC({ buttonLabel: e.target.value })}
+              className={field}
+            />
           </div>
         </div>
 
@@ -456,11 +476,20 @@ export function ContactModal({ trigger }: { trigger: ReactNode }) {
 }
 
 export function GalleryModal({ trigger }: { trigger: ReactNode }) {
-  const [enabled, setEnabled] = useState(true);
-  const [cover, setCover] = useState(true);
-  const [layout, setLayout] = useState(0);
-  const samples = ["/images/template-1.png", "/images/template-2.png"];
+  const inv = useInvitation();
+  const enabled = inv.features.gallery;
+  const g = inv.gallery;
+  const setG = (p: Partial<InvitationState["gallery"]>) =>
+    inv.set((s) => ({ gallery: { ...s.gallery, ...p } }));
   const layouts = ["شبكة", "منزلق", "فسيفساء"];
+
+  const addImages = (files: FileList | null) => {
+    if (!files) return;
+    const urls = Array.from(files).map((f) => URL.createObjectURL(f));
+    setG({ images: [...g.images, ...urls].slice(0, 6) });
+  };
+  const removeImage = (i: number) =>
+    setG({ images: g.images.filter((_, j) => j !== i) });
 
   return (
     <Dialog>
@@ -494,7 +523,7 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
           </span>
           <Switch
             checked={enabled}
-            onClick={() => setEnabled((v) => !v)}
+            onClick={() => inv.toggleFeature("gallery")}
             label="تفعيل معرض الصور"
           />
         </div>
@@ -510,6 +539,8 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
           <div className="flex flex-col gap-1.5">
             <Label>عنوان المعرض (اختياري)</Label>
             <Input
+              value={g.title}
+              onChange={(e) => setG({ title: e.target.value })}
               placeholder="مثال: لحظاتنا الجميلة"
               className="h-[50px] rounded-[12px] border-[#e5e7eb] bg-[#f9fafb] px-4"
             />
@@ -520,7 +551,7 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
             <div className="flex items-center justify-between">
               <Label className="mb-0">الصور</Label>
               <span className="text-xs text-ink-muted" dir="ltr">
-                {samples.length}/6
+                {g.images.length}/6
               </span>
             </div>
 
@@ -533,12 +564,18 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
               <span className="text-xs text-ink-muted">
                 JPG / PNG · حتى 6 صور · 10MB لكل صورة
               </span>
-              <input type="file" accept="image/*" multiple className="hidden" />
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                className="hidden"
+                onChange={(e) => addImages(e.target.files)}
+              />
             </label>
 
             {/* Thumbnails */}
             <div className="grid grid-cols-3 gap-3">
-              {samples.map((src, i) => (
+              {g.images.map((src, i) => (
                 <div
                   key={src}
                   className="group relative aspect-square overflow-hidden rounded-xl border border-[#e5e7eb]"
@@ -548,9 +585,10 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
                     alt={`صورة ${i + 1}`}
                     fill
                     sizes="120px"
+                    unoptimized
                     className="object-cover"
                   />
-                  {cover && i === 0 ? (
+                  {g.cover && i === 0 ? (
                     <span className="absolute end-1.5 top-1.5 rounded-full bg-primary px-2 py-0.5 text-[10px] font-medium text-primary-foreground">
                       غلاف
                     </span>
@@ -558,6 +596,7 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
                   <button
                     type="button"
                     aria-label="حذف الصورة"
+                    onClick={() => removeImage(i)}
                     className="absolute start-1.5 top-1.5 flex size-6 items-center justify-center rounded-full bg-ink/60 text-white opacity-0 transition-opacity group-hover:opacity-100"
                   >
                     <X className="size-3.5" aria-hidden />
@@ -566,16 +605,19 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
               ))}
 
               {/* Add tile */}
-              <label className="flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-[#d1d5db] text-ink-muted transition-colors hover:border-primary hover:text-primary">
-                <Plus className="size-5" aria-hidden />
-                <span className="text-xs">إضافة</span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  className="hidden"
-                />
-              </label>
+              {g.images.length < 6 ? (
+                <label className="flex aspect-square cursor-pointer flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-[#d1d5db] text-ink-muted transition-colors hover:border-primary hover:text-primary">
+                  <Plus className="size-5" aria-hidden />
+                  <span className="text-xs">إضافة</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    className="hidden"
+                    onChange={(e) => addImages(e.target.files)}
+                  />
+                </label>
+              ) : null}
             </div>
           </div>
 
@@ -584,12 +626,12 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
             <Label>طريقة العرض داخل الدعوة</Label>
             <div className="mt-2 flex h-[50px] gap-1 rounded-[12px] border border-[#d1d5db] p-1">
               {layouts.map((l, i) => {
-                const on = layout === i;
+                const on = g.layout === i;
                 return (
                   <button
                     key={l}
                     type="button"
-                    onClick={() => setLayout(i)}
+                    onClick={() => setG({ layout: i })}
                     className={cn(
                       "flex flex-1 items-center justify-center rounded-[8px] border text-sm font-medium transition-colors",
                       on
@@ -609,8 +651,8 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
             Icon={Star}
             title="اجعل أول صورة غلافاً للمعرض"
             desc="تظهر كصورة رئيسية أعلى المعرض"
-            checked={cover}
-            onToggle={() => setCover((v) => !v)}
+            checked={g.cover}
+            onToggle={() => setG({ cover: !g.cover })}
           />
         </div>
 
@@ -626,17 +668,17 @@ export function GalleryModal({ trigger }: { trigger: ReactNode }) {
 }
 
 export function NotesModal({ trigger }: { trigger: ReactNode }) {
-  const [enabled, setEnabled] = useState(true);
-  const [message, setMessage] = useState(
-    "يسعدنا ويشرّفنا حضوركم لمشاركتنا هذه المناسبة الغالية على قلوبنا.",
-  );
-  const [placement, setPlacement] = useState(0);
-  const notes = [
-    "الزيّ الرسمي: كلاسيكي أنيق",
-    "يتوفّر موقف سيارات مجاني للضيوف",
-    "نرجو الحضور قبل الموعد بـ 15 دقيقة",
-  ];
+  const inv = useInvitation();
+  const enabled = inv.features.notes;
+  const n = inv.notes;
+  const setN = (p: Partial<InvitationState["notes"]>) =>
+    inv.set((s) => ({ notes: { ...s.notes, ...p } }));
   const placements = ["أعلى الدعوة", "أسفل الدعوة"];
+
+  const setItem = (i: number, value: string) =>
+    setN({ items: n.items.map((it, j) => (j === i ? value : it)) });
+  const removeItem = (i: number) =>
+    setN({ items: n.items.filter((_, j) => j !== i) });
 
   return (
     <Dialog>
@@ -670,7 +712,7 @@ export function NotesModal({ trigger }: { trigger: ReactNode }) {
           </span>
           <Switch
             checked={enabled}
-            onClick={() => setEnabled((v) => !v)}
+            onClick={() => inv.toggleFeature("notes")}
             label="تفعيل الرسالة والملاحظات"
           />
         </div>
@@ -687,14 +729,14 @@ export function NotesModal({ trigger }: { trigger: ReactNode }) {
             <div className="flex items-center justify-between">
               <Label className="mb-0">رسالة الترحيب</Label>
               <span className="text-xs text-ink-muted" dir="ltr">
-                {message.length}/200
+                {n.message.length}/200
               </span>
             </div>
             <textarea
               rows={3}
               maxLength={200}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
+              value={n.message}
+              onChange={(e) => setN({ message: e.target.value })}
               className="rounded-2xl border border-[#e5e7eb] bg-[#f9fafb] px-4 py-3 text-sm leading-relaxed outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
             />
             <button
@@ -710,18 +752,24 @@ export function NotesModal({ trigger }: { trigger: ReactNode }) {
           <div className="flex flex-col gap-2">
             <Label>ملاحظات مهمّة للضيوف</Label>
             <div className="flex flex-col gap-2">
-              {notes.map((n) => (
+              {n.items.map((item, i) => (
                 <div
-                  key={n}
+                  key={i}
                   className="flex items-center gap-3 rounded-2xl border border-[#e5e7eb] p-3"
                 >
                   <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-rose text-primary">
                     <Info className="size-4" aria-hidden />
                   </span>
-                  <span className="flex-1 text-sm text-ink">{n}</span>
+                  <input
+                    value={item}
+                    onChange={(e) => setItem(i, e.target.value)}
+                    placeholder="اكتب ملاحظة…"
+                    className="flex-1 bg-transparent text-sm text-ink outline-none"
+                  />
                   <button
                     type="button"
                     aria-label="حذف الملاحظة"
+                    onClick={() => removeItem(i)}
                     className="text-ink-muted transition-colors hover:text-primary"
                   >
                     <X className="size-4" aria-hidden />
@@ -729,7 +777,11 @@ export function NotesModal({ trigger }: { trigger: ReactNode }) {
                 </div>
               ))}
             </div>
-            <Button variant="secondary" className="w-full">
+            <Button
+              variant="secondary"
+              className="w-full"
+              onClick={() => setN({ items: [...n.items, ""] })}
+            >
               <Plus className="size-4" aria-hidden />
               إضافة ملاحظة
             </Button>
@@ -740,12 +792,12 @@ export function NotesModal({ trigger }: { trigger: ReactNode }) {
             <Label>موضع الظهور داخل الدعوة</Label>
             <div className="mt-2 flex h-[50px] gap-1 rounded-[12px] border border-[#d1d5db] p-1">
               {placements.map((p, i) => {
-                const on = placement === i;
+                const on = n.placement === i;
                 return (
                   <button
                     key={p}
                     type="button"
-                    onClick={() => setPlacement(i)}
+                    onClick={() => setN({ placement: i })}
                     className={cn(
                       "flex flex-1 items-center justify-center rounded-[8px] border text-sm font-medium transition-colors",
                       on
@@ -773,17 +825,23 @@ export function NotesModal({ trigger }: { trigger: ReactNode }) {
 }
 
 export function ProgramModal({ trigger }: { trigger: ReactNode }) {
-  const [enabled, setEnabled] = useState(true);
-  const [showTimes, setShowTimes] = useState(true);
+  const inv = useInvitation();
+  const enabled = inv.features.program;
+  const prog = inv.program;
+  const setP = (patch: Partial<InvitationState["program"]>) =>
+    inv.set((s) => ({ program: { ...s.program, ...patch } }));
   const [format, setFormat] = useState(0);
-  const steps = [
-    { time: "06:00 م", label: "استقبال الضيوف" },
-    { time: "07:30 م", label: "العشاء" },
-    { time: "09:00 م", label: "مراسم الزفاف" },
-    { time: "10:30 م", label: "تقطيع الكيك" },
-    { time: "11:30 م", label: "ختام الحفل" },
-  ];
   const formats = ["12 ساعة", "24 ساعة"];
+
+  const setStep = (
+    i: number,
+    patch: Partial<{ time: string; label: string }>,
+  ) =>
+    setP({
+      steps: prog.steps.map((st, j) => (j === i ? { ...st, ...patch } : st)),
+    });
+  const removeStep = (i: number) =>
+    setP({ steps: prog.steps.filter((_, j) => j !== i) });
 
   return (
     <Dialog>
@@ -817,7 +875,7 @@ export function ProgramModal({ trigger }: { trigger: ReactNode }) {
           </span>
           <Switch
             checked={enabled}
-            onClick={() => setEnabled((v) => !v)}
+            onClick={() => inv.toggleFeature("program")}
             label="عرض برنامج الحفل داخل الدعوة"
           />
         </div>
@@ -834,28 +892,36 @@ export function ProgramModal({ trigger }: { trigger: ReactNode }) {
             <div className="flex items-center justify-between">
               <Label className="mb-0">فقرات البرنامج</Label>
               <span className="text-xs text-ink-muted" dir="ltr">
-                {steps.length}
+                {prog.steps.length}
               </span>
             </div>
             <div className="flex flex-col gap-2.5">
-              {steps.map((s) => (
+              {prog.steps.map((step, i) => (
                 <div
-                  key={s.label}
-                  className="flex items-center gap-3 rounded-2xl border border-[#e5e7eb] p-3"
+                  key={i}
+                  className="flex items-center gap-2 rounded-2xl border border-[#e5e7eb] p-3"
                 >
                   <GripVertical
                     className="size-4 shrink-0 text-ink-muted/50"
                     aria-hidden
                   />
-                  {showTimes ? (
-                    <span className="min-w-[64px] rounded-lg bg-rose px-2.5 py-1.5 text-center text-xs font-bold text-primary">
-                      {s.time}
-                    </span>
+                  {prog.showTimes ? (
+                    <input
+                      value={step.time}
+                      onChange={(e) => setStep(i, { time: e.target.value })}
+                      className="w-24 rounded-lg bg-rose px-2 py-1.5 text-center text-xs font-bold text-primary outline-none"
+                    />
                   ) : null}
-                  <span className="flex-1 text-sm text-ink">{s.label}</span>
+                  <input
+                    value={step.label}
+                    onChange={(e) => setStep(i, { label: e.target.value })}
+                    placeholder="اسم الفقرة"
+                    className="flex-1 bg-transparent text-sm text-ink outline-none"
+                  />
                   <button
                     type="button"
                     aria-label="حذف الفقرة"
+                    onClick={() => removeStep(i)}
                     className="text-ink-muted transition-colors hover:text-primary"
                   >
                     <X className="size-4" aria-hidden />
@@ -863,7 +929,15 @@ export function ProgramModal({ trigger }: { trigger: ReactNode }) {
                 </div>
               ))}
             </div>
-            <Button variant="secondary" className="w-full">
+            <Button
+              variant="secondary"
+              className="w-full"
+              onClick={() =>
+                setP({
+                  steps: [...prog.steps, { time: "08:00 مساءً", label: "" }],
+                })
+              }
+            >
               <Plus className="size-4" aria-hidden />
               إضافة فقرة
             </Button>
@@ -874,8 +948,8 @@ export function ProgramModal({ trigger }: { trigger: ReactNode }) {
             Icon={Clock}
             title="إظهار الأوقات"
             desc="عرض توقيت كل فقرة بجانبها"
-            checked={showTimes}
-            onToggle={() => setShowTimes((v) => !v)}
+            checked={prog.showTimes}
+            onToggle={() => setP({ showTimes: !prog.showTimes })}
           />
 
           {/* Time format */}

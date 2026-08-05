@@ -54,16 +54,20 @@ import {
   ProgramModal,
   RsvpModal,
 } from "./feature-modals";
+import { InvitationCanvas } from "./invitation/invitation-canvas";
 import { PhonePreview } from "./phone-preview";
 import { WizardStepper } from "./wizard-stepper";
 
 import {
+  DESIGN_BACKGROUNDS,
+  DESIGN_COLORS,
+  DESIGN_FONTS,
   DETAILS_FIELDS,
   EVENT_TYPES,
-  INVITE_TEXT,
   WIZARD_TABS,
   WIZARD_TEMPLATES,
 } from "../content";
+import { useInvitation, type FeatureKey } from "../invitation-store";
 
 const EVENT_ICONS: Record<string, typeof Heart> = {
   heart: Heart,
@@ -309,54 +313,54 @@ type FeatureModal = React.ComponentType<{ trigger: React.ReactNode }>;
 
 /** "خيارات إضافية" tab — grid order fills right→left per row in RTL. */
 const FEATURES: {
+  key: FeatureKey;
   title: string;
   desc: string;
   Icon: typeof Heart;
-  on: boolean;
   recommended?: boolean;
   Modal: FeatureModal | null;
 }[] = [
   {
+    key: "rsvp",
     title: "تأكيد الحضور RSVP",
     desc: "اسمح لضيوفك بتأكيد حضورهم ومتابعة الردود.",
     Icon: UserPlus,
-    on: true,
     recommended: true,
     Modal: RsvpModal,
   },
   {
+    key: "gallery",
     title: "معرض الصور",
     desc: "أضف حتى 6 صور تظهر داخل الدعوة في معرض أنيق.",
     Icon: Images,
-    on: false,
     Modal: GalleryModal,
   },
   {
+    key: "notes",
     title: "رسالة وملاحظات",
     desc: "أضف رسالة ترحيب أو ملاحظات هامة للضيوف.",
     Icon: NotebookPen,
-    on: true,
     Modal: NotesModal,
   },
   {
+    key: "music",
     title: "موسيقى خلفية",
     desc: "أضف موسيقى اختيارية تعمل عند فتح الدعوة.",
     Icon: Music,
-    on: false,
     Modal: null,
   },
   {
+    key: "program",
     title: "برنامج الحفل",
     desc: "أنشئ رمز QR يفتح رابط الدعوة مباشرة عند مسحه.",
     Icon: CalendarCheck,
-    on: true,
     Modal: ProgramModal,
   },
   {
+    key: "contact",
     title: "معلومات التواصل",
     desc: "أضف رقم واتساب لسهولة تواصل ضيوفك معك.",
     Icon: MessageCircle,
-    on: false,
     Modal: ContactModal,
   },
 ];
@@ -392,84 +396,47 @@ function formatEventDate(d: Date) {
   }).format(d);
 }
 
-/* ---- "التصميم" tab options ---- */
-const DESIGN_COLORS = [
-  "#9e0d3d",
-  "#b8955d",
-  "#d4a017",
-  "#111827",
-  "#15803d",
-  "#0f766e",
-  "#2563eb",
-  "#7c3aed",
-  "#be123c",
-];
-
-const DESIGN_FONTS = [
-  { name: "Tajawal", family: "'Tajawal', system-ui, sans-serif", note: "حديث" },
-  { name: "Cairo", family: "'Cairo', system-ui, sans-serif", note: "أنيق" },
-  { name: "Almarai", family: "'Almarai', system-ui, sans-serif", note: "بسيط" },
-  {
-    name: "Amiri",
-    family: "'Amiri', 'Times New Roman', serif",
-    note: "كلاسيكي",
-  },
-  { name: "Aref Ruqaa", family: "'Aref Ruqaa', serif", note: "رقعة" },
-  {
-    name: "Reem Kufi",
-    family: "'Reem Kufi', system-ui, sans-serif",
-    note: "كوفي",
-  },
-];
-
-const DESIGN_BACKGROUNDS = [
-  { name: "أبيض ناصع", css: "#ffffff", dark: false },
-  { name: "وردي ناعم", css: "#fff0f5", dark: false },
-  {
-    name: "متدرّج وردي",
-    css: "linear-gradient(135deg,#fff0f5,#f5e6f0)",
-    dark: false,
-  },
-  {
-    name: "ذهبي فاخر",
-    css: "linear-gradient(135deg,#faf6ec,#efe1c2)",
-    dark: false,
-  },
-  {
-    name: "نقشة زخرفية",
-    css: "repeating-linear-gradient(45deg,#fff0f5 0 8px,#ffffff 8px 16px)",
-    dark: false,
-  },
-  {
-    name: "ليلي داكن",
-    css: "linear-gradient(135deg,#1f2937,#111827)",
-    dark: true,
-  },
-];
-
 export function CreateWizard() {
+  // Editor-only UI state stays local; all invitation data lives in the store.
   const [tab, setTab] = useState(0);
-  const [lang, setLang] = useState("ar");
-  const [event, setEvent] = useState(0);
-  const [template, setTemplate] = useState(3);
-  const [guests, setGuests] = useState("شخصين");
   const [calendar, setCalendar] = useState(true);
-  const [eventDate, setEventDate] = useState<Date | undefined>(
-    new Date(2025, 5, 20),
-  );
-  const [startTime, setStartTime] = useState("07:00 مساءً");
-  const [endTime, setEndTime] = useState("11:00 مساءً");
-  const [details, setDetails] = useState<Record<string, string>>(() =>
-    Object.fromEntries(DETAILS_FIELDS.map((f) => [f.label, f.placeholder])),
-  );
-  const [inviteText, setInviteText] = useState(INVITE_TEXT);
-  const [venue, setVenue] = useState("فندق الريتز كارلتون");
-  const [address, setAddress] = useState("الرياض، السعودية");
-  const [featureOn, setFeatureOn] = useState(() => FEATURES.map((f) => f.on));
-  const [color, setColor] = useState("#9e0d3d");
-  const [font, setFont] = useState(0);
-  const [bg, setBg] = useState(1);
-  const [textScale, setTextScale] = useState(1);
+
+  const inv = useInvitation();
+  const {
+    lang,
+    event,
+    template,
+    guests,
+    eventDate,
+    startTime,
+    endTime,
+    details,
+    inviteText,
+    venue,
+    address,
+    features,
+    color,
+    font,
+    bg,
+    textScale,
+    setDetail,
+    toggleFeature,
+  } = inv;
+  const set = inv.set;
+  const setLang = (v: string) => set({ lang: v });
+  const setEvent = (n: number) => set({ event: n });
+  const setTemplate = (n: number) => set({ template: n });
+  const setGuests = (v: string) => set({ guests: v });
+  const setEventDate = (d?: Date) => set({ eventDate: d });
+  const setStartTime = (v: string) => set({ startTime: v });
+  const setEndTime = (v: string) => set({ endTime: v });
+  const setInviteText = (v: string) => set({ inviteText: v });
+  const setVenue = (v: string) => set({ venue: v });
+  const setAddress = (v: string) => set({ address: v });
+  const setColor = (v: string) => set({ color: v });
+  const setFont = (n: number) => set({ font: n });
+  const setBg = (n: number) => set({ bg: n });
+  const setTextScale = (n: number) => set({ textScale: n });
 
   const t = WIZARD_I18N[lang] ?? WIZARD_I18N.ar;
   const dir = LANGUAGES.find((l) => l.code === lang)?.dir ?? "rtl";
@@ -650,10 +617,7 @@ export function CreateWizard() {
                       <Input
                         value={details["عنوان الدعوة"] ?? ""}
                         onChange={(e) =>
-                          setDetails((d) => ({
-                            ...d,
-                            "عنوان الدعوة": e.target.value,
-                          }))
+                          setDetail("عنوان الدعوة", e.target.value)
                         }
                         placeholder="حفل زفاف"
                         className={FIELD_CLASS}
@@ -693,10 +657,7 @@ export function CreateWizard() {
                         <Input
                           value={details[field.label] ?? ""}
                           onChange={(e) =>
-                            setDetails((d) => ({
-                              ...d,
-                              [field.label]: e.target.value,
-                            }))
+                            setDetail(field.label, e.target.value)
                           }
                           placeholder={field.placeholder}
                           className={FIELD_CLASS}
@@ -1024,8 +985,8 @@ export function CreateWizard() {
             {tab === 6 ? (
               <StepShell title={t.titles[6]} desc={t.descs[6]}>
                 <div className="grid gap-4 sm:grid-cols-2">
-                  {FEATURES.map((f, i) => {
-                    const on = featureOn[i];
+                  {FEATURES.map((f) => {
+                    const on = features[f.key];
                     const setup = (
                       <button
                         type="button"
@@ -1066,11 +1027,7 @@ export function CreateWizard() {
                           </div>
                           <Switch
                             checked={on}
-                            onClick={() =>
-                              setFeatureOn((prev) =>
-                                prev.map((v, j) => (j === i ? !v : v)),
-                              )
-                            }
+                            onClick={() => toggleFeature(f.key)}
                             label={f.title}
                           />
                         </div>
@@ -1112,125 +1069,8 @@ export function CreateWizard() {
 
       <div className="mx-auto lg:sticky lg:top-24 lg:mx-0">
         <PhonePreview>
-          <InvitationPreview
-            eventLabel={EVENT_TYPES[event]?.label ?? ""}
-            templateImg={WIZARD_TEMPLATES[template]?.img ?? ""}
-            color={color}
-            fontFamily={DESIGN_FONTS[font]?.family}
-            bgCss={DESIGN_BACKGROUNDS[bg]?.css}
-            dark={DESIGN_BACKGROUNDS[bg]?.dark}
-            textScale={textScale}
-            dateStr={eventDate ? formatEventDate(eventDate) : ""}
-            startTime={startTime}
-            endTime={endTime}
-            name1={details["الاسم الأول"]}
-            name2={details["الاسم الثاني"]}
-            inviteText={inviteText}
-            venue={venue}
-            address={address}
-          />
+          <InvitationCanvas />
         </PhonePreview>
-      </div>
-    </div>
-  );
-}
-
-/** Live invitation rendered inside the phone, driven by the wizard state. */
-function InvitationPreview({
-  eventLabel,
-  templateImg,
-  color,
-  fontFamily,
-  bgCss,
-  dark,
-  textScale,
-  dateStr,
-  startTime,
-  endTime,
-  name1,
-  name2,
-  inviteText,
-  venue,
-  address,
-}: {
-  eventLabel: string;
-  templateImg: string;
-  color: string;
-  fontFamily?: string;
-  bgCss?: string;
-  dark?: boolean;
-  textScale: number;
-  dateStr: string;
-  startTime: string;
-  endTime: string;
-  name1?: string;
-  name2?: string;
-  inviteText: string;
-  venue: string;
-  address: string;
-}) {
-  const scale = [0.9, 1, 1.12][textScale] ?? 1;
-  return (
-    <div
-      dir="rtl"
-      className="flex h-full flex-col"
-      style={{ background: bgCss, fontFamily }}
-    >
-      {templateImg ? (
-        <div className="relative h-[36%] w-full shrink-0 overflow-hidden">
-          <Image
-            src={templateImg}
-            alt=""
-            fill
-            sizes="300px"
-            className="object-cover"
-          />
-        </div>
-      ) : null}
-      <div
-        className={cn(
-          "flex flex-1 flex-col items-center justify-center gap-1.5 px-4 py-3 text-center",
-          dark ? "text-white" : "text-ink",
-        )}
-      >
-        <span
-          className="font-medium tracking-wide"
-          style={{ color, fontSize: 10 * scale }}
-        >
-          {eventLabel}
-        </span>
-        <span className="h-px w-8" style={{ backgroundColor: color }} />
-        <h3
-          className="leading-tight font-bold"
-          style={{ fontSize: 19 * scale }}
-        >
-          {name1 || "—"} <span style={{ color }}>&</span> {name2 || "—"}
-        </h3>
-        <p
-          className="leading-relaxed opacity-85"
-          style={{ fontSize: 10.5 * scale }}
-        >
-          {inviteText}
-        </p>
-        <div className="mt-0.5 flex flex-col items-center gap-0.5">
-          <span
-            className="font-semibold"
-            style={{ color, fontSize: 11.5 * scale }}
-          >
-            {dateStr}
-          </span>
-          <span
-            className="opacity-80"
-            dir="ltr"
-            style={{ fontSize: 10 * scale }}
-          >
-            {startTime} – {endTime}
-          </span>
-        </div>
-        <div className="opacity-85" style={{ fontSize: 10 * scale }}>
-          <div className="font-medium">{venue}</div>
-          <div className="opacity-75">{address}</div>
-        </div>
       </div>
     </div>
   );

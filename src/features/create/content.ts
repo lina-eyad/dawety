@@ -44,6 +44,15 @@ export const WIZARD_TEMPLATES: {
   { title: "أناقة خضراء", img: "/images/template-1.png" },
   { title: "نعومة بنفسجية", img: "/images/template-2.png" },
   { title: "Royal Burgundy", img: "/images/template-4.png" },
+  { title: "مسك المساء", img: "/images/template-3.png", featured: true },
+  { title: "همسة وردية", img: "/images/template-1.png" },
+  { title: "تاج ملكي", img: "/images/template-5.png" },
+  { title: "ليلة العمر", img: "/images/template-2.png" },
+  { title: "بريق فيروزي", img: "/images/template-4.png" },
+  { title: "سطور ذهبية", img: "/images/template-3.png" },
+  { title: "زهر اللوز", img: "/images/template-1.png", featured: true },
+  { title: "ملكي بنفسجي", img: "/images/template-5.png" },
+  { title: "لمسة رخامية", img: "/images/template-2.png" },
 ];
 
 export const DETAILS_FIELDS = [

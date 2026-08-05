@@ -553,47 +553,49 @@ export function CreateWizard() {
                   </button>
                 }
               >
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  {WIZARD_TEMPLATES.map((tpl, i) => {
-                    const active = i === template;
-                    return (
-                      <button
-                        key={tpl.title}
-                        type="button"
-                        onClick={() => setTemplate(i)}
-                        className={cn(
-                          "group relative overflow-hidden rounded-xl border text-center transition-colors",
-                          active ? "border-primary" : "border-[#d1d5db]",
-                        )}
-                      >
-                        {active ? (
-                          <span className="absolute end-2 top-2 z-10 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                            <Check className="size-3" aria-hidden />
-                          </span>
-                        ) : null}
-                        <div className="relative aspect-[3/4] bg-warm-bg">
-                          <Image
-                            src={tpl.img}
-                            alt={tpl.title}
-                            fill
-                            sizes="200px"
-                            className="object-cover"
-                          />
-                        </div>
-                        <div className="flex items-center justify-center gap-1 p-2">
-                          <span className="text-xs font-medium text-ink">
-                            {tpl.title}
-                          </span>
-                          {tpl.featured ? (
-                            <span className="rounded-full bg-rose px-1.5 text-[10px] text-primary">
-                              مميز
+                <ScrollArea className="-me-2 max-h-[400px] pe-3">
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                    {WIZARD_TEMPLATES.map((tpl, i) => {
+                      const active = i === template;
+                      return (
+                        <button
+                          key={tpl.title}
+                          type="button"
+                          onClick={() => setTemplate(i)}
+                          className={cn(
+                            "group relative overflow-hidden rounded-xl border text-center transition-colors",
+                            active ? "border-primary" : "border-[#d1d5db]",
+                          )}
+                        >
+                          {active ? (
+                            <span className="absolute end-2 top-2 z-10 flex size-5 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                              <Check className="size-3" aria-hidden />
                             </span>
                           ) : null}
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
+                          <div className="relative aspect-[3/4] bg-warm-bg">
+                            <Image
+                              src={tpl.img}
+                              alt={tpl.title}
+                              fill
+                              sizes="200px"
+                              className="object-cover"
+                            />
+                          </div>
+                          <div className="flex items-center justify-center gap-1 p-2">
+                            <span className="text-xs font-medium text-ink">
+                              {tpl.title}
+                            </span>
+                            {tpl.featured ? (
+                              <span className="rounded-full bg-rose px-1.5 text-[10px] text-primary">
+                                مميز
+                              </span>
+                            ) : null}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </ScrollArea>
               </StepShell>
             ) : null}
 

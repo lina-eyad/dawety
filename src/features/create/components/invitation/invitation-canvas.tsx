@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import {
   CalendarDays,
@@ -17,7 +18,7 @@ import {
   Users,
   X,
 } from "lucide-react";
-import { useRef, useState } from "react";
+import { useRef, useState, type RefObject } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -31,6 +32,46 @@ import { useInvitation, type InvitationState } from "../../invitation-store";
 
 /** Text-size multipliers for the "حجم النص" design control. */
 const SCALE = [0.92, 1, 1.1];
+/** Gentle, premium ease-out — used across every reveal. */
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+type Anim = { on: boolean; root: RefObject<HTMLDivElement | null> };
+
+/** Scroll-reveal props for a whole section (no-op when animation is off). */
+function reveal(anim: Anim, delay = 0, y = 16) {
+  return anim.on
+    ? {
+        initial: { opacity: 0, y },
+        whileInView: { opacity: 1, y: 0 },
+        viewport: { once: true, root: anim.root, margin: "-40px" } as const,
+        transition: { duration: 0.55, ease: EASE, delay },
+      }
+    : {};
+}
+
+/** Staggered-container props; children use `itemVariants`. */
+function stagger(anim: Anim, mode: "view" | "mount" = "view") {
+  if (!anim.on) return {};
+  const base = {
+    variants: {
+      hidden: {},
+      show: { transition: { staggerChildren: 0.1, delayChildren: 0.08 } },
+    },
+    initial: "hidden",
+  } as const;
+  return mode === "mount"
+    ? { ...base, animate: "show" }
+    : {
+        ...base,
+        whileInView: "show",
+        viewport: { once: true, root: anim.root, margin: "-40px" } as const,
+      };
+}
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: EASE } },
+};
 
 function formatDate(d?: Date) {
   if (!d) return "";
@@ -60,11 +101,17 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 /**
  * The digital invitation exactly as a guest will see it — a self-contained,
- * scrollable, mobile-first canvas driven entirely by the shared invitation
- * store. Sections render conditionally based on the enabled features.
+ * scrollable, mobile-first canvas driven by the shared invitation store.
+ * `animated` turns on the premium opening + scroll-reveal experience (used on
+ * the guest /preview); the live editor preview leaves it off so edits are
+ * instant. All motion is transform/opacity only and honours reduced-motion.
  */
-export function InvitationCanvas() {
+export function InvitationCanvas({ animated = false }: { animated?: boolean }) {
   const s = useInvitation();
+  const reduce = useReducedMotion();
+  const root = useRef<HTMLDivElement>(null);
+  const anim: Anim = { on: animated && !reduce, root };
+
   const bg = DESIGN_BACKGROUNDS[s.bg] ?? DESIGN_BACKGROUNDS[0];
   const fontFamily = DESIGN_FONTS[s.font]?.family;
   const scale = SCALE[s.textScale] ?? 1;
@@ -72,6 +119,7 @@ export function InvitationCanvas() {
 
   return (
     <div
+      ref={root}
       dir="rtl"
       className={cn(
         "h-full overflow-x-hidden overflow-y-auto",
@@ -79,30 +127,38 @@ export function InvitationCanvas() {
       )}
       style={{ background: bg.css, fontFamily }}
     >
-      <Hero s={s} acc={acc} scale={scale} />
-      <Details s={s} acc={acc} scale={scale} />
+      <Hero s={s} acc={acc} scale={scale} anim={anim} />
+      <Details s={s} acc={acc} scale={scale} anim={anim} />
       {s.features.notes ? (
-        <MessageSection s={s} acc={acc} scale={scale} />
+        <MessageSection s={s} acc={acc} scale={scale} anim={anim} />
       ) : null}
       {s.features.program ? (
-        <ProgramSection s={s} acc={acc} scale={scale} />
+        <ProgramSection s={s} acc={acc} scale={scale} anim={anim} />
       ) : null}
       {s.features.gallery && s.gallery.images.length > 0 ? (
-        <GallerySection s={s} acc={acc} scale={scale} />
+        <GallerySection s={s} acc={acc} scale={scale} anim={anim} />
       ) : null}
-      {s.features.rsvp ? <RsvpSection s={s} acc={acc} scale={scale} /> : null}
+      {s.features.rsvp ? (
+        <RsvpSection s={s} acc={acc} scale={scale} anim={anim} />
+      ) : null}
       {s.features.contact ? (
-        <ContactSection s={s} acc={acc} scale={scale} />
+        <ContactSection s={s} acc={acc} scale={scale} anim={anim} />
       ) : null}
       <div className="h-6" />
-      {s.features.music ? <MusicControl s={s} acc={acc} /> : null}
+      {s.features.music ? (
+        <MusicControl s={s} acc={acc} reduce={!!reduce} />
+      ) : null}
     </div>
   );
 }
 
-type SectionProps = { s: InvitationState; acc: string; scale: number };
+type SectionProps = {
+  s: InvitationState;
+  acc: string;
+  scale: number;
+  anim: Anim;
+};
 
-/** Section title with two short accent rules. */
 function SectionTitle({
   children,
   acc,
@@ -123,7 +179,7 @@ function SectionTitle({
   );
 }
 
-function Hero({ s, acc, scale }: SectionProps) {
+function Hero({ s, acc, scale, anim }: SectionProps) {
   const img = WIZARD_TEMPLATES[s.template]?.img;
   const name1 = s.details["الاسم الأول"];
   const name2 = s.details["الاسم الثاني"];
@@ -131,40 +187,66 @@ function Hero({ s, acc, scale }: SectionProps) {
     <section>
       <div className="relative aspect-4/5 w-full overflow-hidden">
         {img ? (
-          <Image src={img} alt="" fill sizes="480px" className="object-cover" />
+          <motion.div
+            className="absolute inset-0"
+            initial={anim.on ? { opacity: 0, scale: 1.06 } : false}
+            animate={anim.on ? { opacity: 1, scale: 1 } : undefined}
+            transition={{ duration: 0.9, ease: EASE }}
+          >
+            <Image
+              src={img}
+              alt=""
+              fill
+              sizes="480px"
+              className="object-cover"
+            />
+          </motion.div>
         ) : null}
         <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-black/25" />
-        <div className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-2 p-5 text-center text-white">
-          <span
+        <motion.div
+          className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-2 p-5 text-center text-white"
+          {...stagger(anim, "mount")}
+        >
+          <motion.span
+            variants={itemVariants}
             className="rounded-full bg-white/15 px-3 py-1 font-medium backdrop-blur-sm"
             style={{ fontSize: 11 * scale }}
           >
             {EVENT_TYPES[s.event]?.label}
-          </span>
-          <h1
+          </motion.span>
+          <motion.h1
+            variants={itemVariants}
             className="leading-tight font-bold"
             style={{ fontSize: 30 * scale }}
           >
             {name1 || "—"}
             <span className="mx-1 opacity-90">&</span>
             {name2 || "—"}
-          </h1>
-        </div>
+          </motion.h1>
+        </motion.div>
       </div>
-      <div className="flex flex-col items-center px-6 py-6 text-center">
-        <span className="h-px w-12" style={{ background: acc }} />
-        <p
+      <motion.div
+        className="flex flex-col items-center px-6 py-6 text-center"
+        {...stagger(anim, "mount")}
+      >
+        <motion.span
+          variants={itemVariants}
+          className="h-px w-12"
+          style={{ background: acc }}
+        />
+        <motion.p
+          variants={itemVariants}
           className="mt-4 leading-relaxed opacity-90"
           style={{ fontSize: 13.5 * scale }}
         >
           {s.inviteText}
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
     </section>
   );
 }
 
-function Details({ s, acc, scale }: SectionProps) {
+function Details({ s, acc, scale, anim }: SectionProps) {
   const rows = [
     { Icon: CalendarDays, value: formatDate(s.eventDate) },
     { Icon: Clock, value: `${s.startTime} — ${s.endTime}`, ltr: true },
@@ -172,7 +254,7 @@ function Details({ s, acc, scale }: SectionProps) {
     { Icon: Users, value: `الدعوة باسم ${s.guests}` },
   ];
   return (
-    <section className="px-6 pb-6">
+    <motion.section className="px-6 pb-6" {...reveal(anim)}>
       <div
         className="mx-auto flex max-w-xs flex-col gap-3.5 rounded-2xl border p-5"
         style={{ borderColor: acc + "33" }}
@@ -207,13 +289,13 @@ function Details({ s, acc, scale }: SectionProps) {
           ) : null,
         )}
       </div>
-    </section>
+    </motion.section>
   );
 }
 
-function MessageSection({ s, acc, scale }: SectionProps) {
+function MessageSection({ s, acc, scale, anim }: SectionProps) {
   return (
-    <section className="px-6 py-6">
+    <motion.section className="px-6 py-6" {...reveal(anim)}>
       <SectionTitle acc={acc} scale={scale}>
         رسالتنا إليكم
       </SectionTitle>
@@ -224,10 +306,14 @@ function MessageSection({ s, acc, scale }: SectionProps) {
         {s.notes.message}
       </p>
       {s.notes.items.length > 0 ? (
-        <div className="mx-auto mt-5 flex max-w-xs flex-col gap-2.5">
-          {s.notes.items.map((n) => (
-            <div
-              key={n}
+        <motion.div
+          className="mx-auto mt-5 flex max-w-xs flex-col gap-2.5"
+          {...stagger(anim)}
+        >
+          {s.notes.items.map((n, i) => (
+            <motion.div
+              key={i}
+              variants={itemVariants}
               className="flex items-center gap-2.5 rounded-xl border px-3 py-2.5"
               style={{ borderColor: acc + "22" }}
             >
@@ -237,23 +323,26 @@ function MessageSection({ s, acc, scale }: SectionProps) {
                 aria-hidden
               />
               <span style={{ fontSize: 12.5 * scale }}>{n}</span>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       ) : null}
-    </section>
+    </motion.section>
   );
 }
 
-function ProgramSection({ s, acc, scale }: SectionProps) {
+function ProgramSection({ s, acc, scale, anim }: SectionProps) {
   return (
-    <section className="px-6 py-6">
+    <motion.section className="px-6 py-6" {...reveal(anim)}>
       <SectionTitle acc={acc} scale={scale}>
         برنامج الحفل
       </SectionTitle>
-      <div className="mx-auto mt-5 flex max-w-xs flex-col">
+      <motion.div
+        className="mx-auto mt-5 flex max-w-xs flex-col"
+        {...stagger(anim)}
+      >
         {s.program.steps.map((step, i) => (
-          <div key={i} className="flex gap-3">
+          <motion.div key={i} variants={itemVariants} className="flex gap-3">
             <div className="flex flex-col items-center">
               <span
                 className="size-3 shrink-0 rounded-full"
@@ -278,34 +367,37 @@ function ProgramSection({ s, acc, scale }: SectionProps) {
               ) : null}
               <p style={{ fontSize: 13 * scale }}>{step.label}</p>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
-    </section>
+      </motion.div>
+    </motion.section>
   );
 }
 
-function GallerySection({ s, acc, scale }: SectionProps) {
+function GallerySection({ s, acc, scale, anim }: SectionProps) {
   const [open, setOpen] = useState<number | null>(null);
   const imgs = s.gallery.images;
-  const show = (i: number) => setOpen(i);
   const move = (dir: number) =>
     setOpen((cur) =>
       cur === null ? cur : (cur + dir + imgs.length) % imgs.length,
     );
 
   return (
-    <section className="px-6 py-6">
+    <motion.section className="px-6 py-6" {...reveal(anim)}>
       <SectionTitle acc={acc} scale={scale}>
         {s.gallery.title || "معرض الصور"}
       </SectionTitle>
-      <div className="mx-auto mt-5 grid max-w-sm grid-cols-3 gap-2">
+      <motion.div
+        className="mx-auto mt-5 grid max-w-sm grid-cols-3 gap-2"
+        {...stagger(anim)}
+      >
         {imgs.map((src, i) => (
-          <button
+          <motion.button
             key={i}
+            variants={itemVariants}
             type="button"
-            onClick={() => show(i)}
-            className="group relative aspect-square overflow-hidden rounded-xl"
+            onClick={() => setOpen(i)}
+            className="group relative aspect-square overflow-hidden rounded-xl transition-transform duration-200 active:scale-95"
             aria-label={`عرض الصورة ${i + 1}`}
           >
             <Image
@@ -314,78 +406,92 @@ function GallerySection({ s, acc, scale }: SectionProps) {
               fill
               sizes="120px"
               unoptimized
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
+              className="object-cover transition-transform duration-500 group-hover:scale-110"
             />
-          </button>
+          </motion.button>
         ))}
-      </div>
+      </motion.div>
 
-      {open !== null ? (
-        <div
-          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/85 p-4"
-          onClick={() => setOpen(null)}
-        >
-          <button
-            type="button"
-            aria-label="إغلاق"
-            className="absolute end-4 top-4 flex size-10 items-center justify-center rounded-full bg-white/10 text-white"
+      <AnimatePresence>
+        {open !== null ? (
+          <motion.div
+            className="fixed inset-0 z-[60] flex items-center justify-center bg-black/85 p-4"
+            onClick={() => setOpen(null)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
           >
-            <X className="size-5" aria-hidden />
-          </button>
-          <button
-            type="button"
-            aria-label="السابق"
-            onClick={(e) => {
-              e.stopPropagation();
-              move(1);
-            }}
-            className="absolute end-3 flex size-10 items-center justify-center rounded-full bg-white/10 text-white"
-          >
-            <ChevronRight className="size-6" aria-hidden />
-          </button>
-          <div
-            className="relative aspect-4/5 w-full max-w-sm overflow-hidden rounded-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Image
+            <button
+              type="button"
+              aria-label="إغلاق"
+              className="absolute end-4 top-4 flex size-10 items-center justify-center rounded-full bg-white/10 text-white transition-transform active:scale-90"
+            >
+              <X className="size-5" aria-hidden />
+            </button>
+            <button
+              type="button"
+              aria-label="السابق"
+              onClick={(e) => {
+                e.stopPropagation();
+                move(1);
+              }}
+              className="absolute end-3 flex size-10 items-center justify-center rounded-full bg-white/10 text-white transition-transform active:scale-90"
+            >
+              <ChevronRight className="size-6" aria-hidden />
+            </button>
+            <motion.div
               key={open}
-              src={imgs[open]}
-              alt=""
-              fill
-              sizes="480px"
-              unoptimized
-              className="animate-in object-cover duration-300 fade-in"
-            />
-          </div>
-          <button
-            type="button"
-            aria-label="التالي"
-            onClick={(e) => {
-              e.stopPropagation();
-              move(-1);
-            }}
-            className="absolute start-3 flex size-10 items-center justify-center rounded-full bg-white/10 text-white"
-          >
-            <ChevronLeft className="size-6" aria-hidden />
-          </button>
-        </div>
-      ) : null}
-    </section>
+              className="relative aspect-4/5 w-full max-w-sm overflow-hidden rounded-2xl"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.28, ease: EASE }}
+            >
+              <Image
+                src={imgs[open]}
+                alt=""
+                fill
+                sizes="480px"
+                unoptimized
+                className="object-cover"
+              />
+            </motion.div>
+            <button
+              type="button"
+              aria-label="التالي"
+              onClick={(e) => {
+                e.stopPropagation();
+                move(-1);
+              }}
+              className="absolute start-3 flex size-10 items-center justify-center rounded-full bg-white/10 text-white transition-transform active:scale-90"
+            >
+              <ChevronLeft className="size-6" aria-hidden />
+            </button>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </motion.section>
   );
 }
 
-function RsvpSection({ s, acc, scale }: SectionProps) {
+function RsvpSection({ s, acc, scale, anim }: SectionProps) {
   const [attending, setAttending] = useState<boolean | null>(null);
   const [name, setName] = useState("");
   const [count, setCount] = useState(1);
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
   const field =
-    "w-full rounded-xl border bg-white/60 px-3 py-2.5 text-sm text-ink outline-none";
+    "w-full rounded-xl border bg-white/60 px-3 py-2.5 text-sm text-ink outline-none transition-shadow focus:ring-2";
 
   if (sent) {
     return (
-      <section className="px-6 py-8">
+      <motion.section
+        className="px-6 py-8"
+        initial={anim.on ? { opacity: 0, scale: 0.96 } : false}
+        animate={anim.on ? { opacity: 1, scale: 1 } : undefined}
+        transition={{ duration: 0.4, ease: EASE }}
+      >
         <div
           className="mx-auto flex max-w-xs flex-col items-center gap-2 rounded-2xl border p-6 text-center"
           style={{ borderColor: acc + "33" }}
@@ -398,12 +504,15 @@ function RsvpSection({ s, acc, scale }: SectionProps) {
           </span>
           <p style={{ fontSize: 13.5 * scale }}>{s.rsvp.thanks}</p>
         </div>
-      </section>
+      </motion.section>
     );
   }
 
+  const pill =
+    "rounded-xl border py-2.5 text-sm font-medium transition-all duration-200 active:scale-95";
+
   return (
-    <section className="px-6 py-6">
+    <motion.section className="px-6 py-6" {...reveal(anim)}>
       <SectionTitle acc={acc} scale={scale}>
         تأكيد الحضور
       </SectionTitle>
@@ -419,7 +528,7 @@ function RsvpSection({ s, acc, scale }: SectionProps) {
                 key={o.label}
                 type="button"
                 onClick={() => setAttending(o.val)}
-                className="rounded-xl border py-2.5 text-sm font-medium transition-colors"
+                className={pill}
                 style={
                   on
                     ? { background: acc, color: "#fff", borderColor: acc }
@@ -432,66 +541,77 @@ function RsvpSection({ s, acc, scale }: SectionProps) {
           })}
         </div>
 
-        {attending ? (
-          <>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="اسم الضيف"
-              className={field}
-              style={{ borderColor: acc + "33" }}
-            />
-            {s.rsvp.companions ? (
-              <div
-                className="flex items-center justify-between rounded-xl border px-3 py-2"
-                style={{ borderColor: acc + "33" }}
-              >
-                <span className="text-sm text-ink">عدد المرافقين</span>
-                <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    aria-label="إنقاص"
-                    onClick={() => setCount((c) => Math.max(1, c - 1))}
-                    className="flex size-7 items-center justify-center rounded-full border text-ink"
-                    style={{ borderColor: acc + "44" }}
-                  >
-                    −
-                  </button>
-                  <span className="w-5 text-center text-sm font-bold text-ink">
-                    {count}
-                  </span>
-                  <button
-                    type="button"
-                    aria-label="زيادة"
-                    onClick={() =>
-                      setCount((c) => Math.min(s.rsvp.maxCompanions + 1, c + 1))
-                    }
-                    className="flex size-7 items-center justify-center rounded-full border text-ink"
-                    style={{ borderColor: acc + "44" }}
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-            ) : null}
-            {s.rsvp.guestMsg ? (
-              <textarea
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                rows={2}
-                placeholder="رسالة تهنئة (اختياري)"
+        <AnimatePresence initial={false}>
+          {attending ? (
+            <motion.div
+              key="fields"
+              className="flex flex-col gap-3 overflow-hidden"
+              initial={anim.on ? { opacity: 0, height: 0 } : false}
+              animate={anim.on ? { opacity: 1, height: "auto" } : undefined}
+              exit={anim.on ? { opacity: 0, height: 0 } : undefined}
+              transition={{ duration: 0.3, ease: EASE }}
+            >
+              <input
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="اسم الضيف"
                 className={field}
                 style={{ borderColor: acc + "33" }}
               />
-            ) : null}
-          </>
-        ) : null}
+              {s.rsvp.companions ? (
+                <div
+                  className="flex items-center justify-between rounded-xl border px-3 py-2"
+                  style={{ borderColor: acc + "33" }}
+                >
+                  <span className="text-sm text-ink">عدد المرافقين</span>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      aria-label="إنقاص"
+                      onClick={() => setCount((c) => Math.max(1, c - 1))}
+                      className="flex size-7 items-center justify-center rounded-full border text-ink transition-transform active:scale-90"
+                      style={{ borderColor: acc + "44" }}
+                    >
+                      −
+                    </button>
+                    <span className="w-5 text-center text-sm font-bold text-ink">
+                      {count}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label="زيادة"
+                      onClick={() =>
+                        setCount((c) =>
+                          Math.min(s.rsvp.maxCompanions + 1, c + 1),
+                        )
+                      }
+                      className="flex size-7 items-center justify-center rounded-full border text-ink transition-transform active:scale-90"
+                      style={{ borderColor: acc + "44" }}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              ) : null}
+              {s.rsvp.guestMsg ? (
+                <textarea
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  rows={2}
+                  placeholder="رسالة تهنئة (اختياري)"
+                  className={field}
+                  style={{ borderColor: acc + "33" }}
+                />
+              ) : null}
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
 
         <button
           type="button"
           disabled={attending === null}
           onClick={() => setSent(true)}
-          className="rounded-xl py-3 text-sm font-bold text-white transition-opacity disabled:opacity-40"
+          className="rounded-xl py-3 text-sm font-bold text-white transition-all duration-200 hover:brightness-110 active:scale-95 disabled:opacity-40"
           style={{ background: acc }}
         >
           إرسال الرد
@@ -500,11 +620,11 @@ function RsvpSection({ s, acc, scale }: SectionProps) {
           آخر موعد للرد: {s.rsvp.deadline}
         </p>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
-function ContactSection({ s, acc, scale }: SectionProps) {
+function ContactSection({ s, acc, scale, anim }: SectionProps) {
   const c = s.contact;
   const waDigits = c.whatsapp.value.replace(/\D/g, "");
   const items = [
@@ -534,7 +654,7 @@ function ContactSection({ s, acc, scale }: SectionProps) {
   if (items.length === 0) return null;
 
   return (
-    <section className="px-6 py-6">
+    <motion.section className="px-6 py-6" {...reveal(anim)}>
       <SectionTitle acc={acc} scale={scale}>
         {c.buttonLabel || "تواصل معنا"}
       </SectionTitle>
@@ -553,10 +673,10 @@ function ContactSection({ s, acc, scale }: SectionProps) {
             href={it.href}
             target={it.external ? "_blank" : undefined}
             rel={it.external ? "noopener noreferrer" : undefined}
-            className="flex flex-col items-center gap-1.5"
+            className="flex flex-col items-center gap-1.5 transition-transform duration-200 hover:-translate-y-0.5 active:scale-95"
           >
             <span
-              className="flex size-12 items-center justify-center rounded-full"
+              className="flex size-12 items-center justify-center rounded-full transition-shadow hover:shadow-md"
               style={{ background: acc + "1a", color: acc }}
             >
               <it.Icon className="size-5" aria-hidden />
@@ -565,11 +685,19 @@ function ContactSection({ s, acc, scale }: SectionProps) {
           </a>
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 }
 
-function MusicControl({ s, acc }: { s: InvitationState; acc: string }) {
+function MusicControl({
+  s,
+  acc,
+  reduce,
+}: {
+  s: InvitationState;
+  acc: string;
+  reduce: boolean;
+}) {
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
@@ -588,13 +716,23 @@ function MusicControl({ s, acc }: { s: InvitationState; acc: string }) {
       onClick={toggle}
       aria-label={playing ? "إيقاف الموسيقى" : "تشغيل الموسيقى"}
       aria-pressed={playing}
-      className="sticky bottom-4 float-start ms-4 flex items-center gap-2 rounded-full px-3 py-2 text-white shadow-lg backdrop-blur-sm"
+      className="sticky bottom-4 float-start ms-4 flex items-center gap-2 rounded-full px-3 py-2 text-white shadow-lg backdrop-blur-sm transition-transform active:scale-90"
       style={{ background: acc }}
     >
       {s.music.src ? (
         <audio ref={audioRef} src={s.music.src} loop preload="none" />
       ) : null}
-      <Music className={cn("size-4", playing && "animate-pulse")} aria-hidden />
+      <motion.span
+        animate={playing && !reduce ? { scale: [1, 1.18, 1] } : { scale: 1 }}
+        transition={
+          playing && !reduce
+            ? { duration: 1.6, repeat: Infinity, ease: "easeInOut" }
+            : { duration: 0.2 }
+        }
+        className="flex"
+      >
+        <Music className="size-4" aria-hidden />
+      </motion.span>
       {playing ? (
         <Pause className="size-4" aria-hidden />
       ) : (

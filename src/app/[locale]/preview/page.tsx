@@ -43,7 +43,7 @@ export default async function PreviewPage({
             <div className="relative aspect-[380/760] overflow-hidden rounded-[40px] border-[10px] border-ink/90 bg-background shadow-soft-lg">
               <span className="absolute top-0 left-1/2 z-10 h-6 w-32 -translate-x-1/2 rounded-b-2xl bg-ink" />
               <div className="size-full overflow-hidden rounded-[30px]">
-                <InvitationCanvas />
+                <InvitationCanvas animated />
               </div>
             </div>
           </div>

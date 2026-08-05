@@ -1,16 +1,6 @@
-import { ROUTES } from "@/constants/routes";
-import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
 import { STAGES } from "../content";
-
-/** Each stage maps to its page so the bar doubles as flow navigation. */
-const STAGE_ROUTES = [
-  ROUTES.create,
-  ROUTES.preview,
-  ROUTES.checkout,
-  ROUTES.share,
-];
 
 /** Outer 4-stage progress bar (التصميم → المعاينة → الدفع → المشاركة). */
 export function WizardStepper({
@@ -32,10 +22,9 @@ export function WizardStepper({
             key={stage.num}
             className="flex flex-1 items-center last:flex-none"
           >
-            <Link
-              href={STAGE_ROUTES[i]}
+            <div
               aria-current={active ? "step" : undefined}
-              className="group flex flex-col items-center gap-2"
+              className="flex flex-col items-center gap-2"
             >
               <span
                 className={cn(
@@ -43,25 +32,21 @@ export function WizardStepper({
                   active
                     ? "border-primary bg-primary text-primary-foreground"
                     : done
-                      ? "border-primary text-primary group-hover:bg-rose"
-                      : "border-[#afb8c7] text-[#afb8c7] group-hover:border-primary/50 group-hover:text-primary/70",
+                      ? "border-primary text-primary"
+                      : "border-[#afb8c7] text-[#afb8c7]",
                 )}
               >
                 {stage.num}
               </span>
               <span
                 className={cn(
-                  "text-xs font-medium transition-colors",
-                  active
-                    ? "text-primary"
-                    : done
-                      ? "text-primary"
-                      : "text-[#afb8c7] group-hover:text-primary/70",
+                  "text-xs font-medium",
+                  active || done ? "text-primary" : "text-[#afb8c7]",
                 )}
               >
                 {stage.label}
               </span>
-            </Link>
+            </div>
             {i < STAGES.length - 1 ? (
               <span
                 className={cn(

@@ -1042,10 +1042,7 @@ export function CreateWizard() {
                     return (
                       <div
                         key={f.title}
-                        className={cn(
-                          "relative flex flex-col justify-between gap-4 rounded-[16px] border p-5",
-                          f.recommended ? "border-primary" : "border-[#e5e7eb]",
-                        )}
+                        className="relative flex flex-col justify-between gap-4 rounded-[16px] border border-[#e5e7eb] p-5"
                       >
                         {f.recommended ? (
                           <span className="absolute -top-3 right-6 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground">

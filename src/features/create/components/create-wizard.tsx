@@ -553,7 +553,7 @@ export function CreateWizard() {
                   </button>
                 }
               >
-                <ScrollArea className="-me-2 max-h-[400px] pe-3">
+                <ScrollArea className="-me-2 h-[420px] pe-3">
                   <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
                     {WIZARD_TEMPLATES.map((tpl, i) => {
                       const active = i === template;

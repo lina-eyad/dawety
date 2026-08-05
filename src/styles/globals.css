@@ -199,20 +199,20 @@
 /* Gray scrollbars across the whole site (native scrollbars). Elements that
    explicitly hide their scrollbar keep it hidden (more specific rule wins). */
 * {
-  scrollbar-color: #c1c1c1 transparent;
+  scrollbar-color: #d6d6d6 transparent;
 }
 *::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 *::-webkit-scrollbar-thumb {
-  background-color: #c1c1c1;
+  background-color: #d6d6d6;
   border-radius: 9999px;
   border: 2px solid transparent;
   background-clip: content-box;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background-color: #a8a8a8;
+  background-color: #c4c4c4;
 }
 *::-webkit-scrollbar-track {
   background: transparent;

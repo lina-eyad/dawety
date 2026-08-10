@@ -23,7 +23,6 @@ import {
   Star,
   UserCheck,
   Users,
-  Utensils,
   X,
 } from "lucide-react";
 import { useState, type ComponentType, type ReactNode } from "react";
@@ -233,13 +232,6 @@ export function RsvpModal({ trigger }: { trigger: ReactNode }) {
                 desc="اسمح بإرسال تهنئة أو ملاحظة قصيرة"
                 checked={c.guestMsg}
                 onToggle={() => setC({ guestMsg: !c.guestMsg })}
-              />
-              <ToggleRow
-                Icon={Utensils}
-                title="تفضيل الوجبة"
-                desc="اسمح للضيف باختيار نوع الطعام المفضل"
-                checked={c.meal}
-                onToggle={() => setC({ meal: !c.meal })}
               />
             </div>
           </div>

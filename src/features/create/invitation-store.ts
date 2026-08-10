@@ -38,7 +38,6 @@ export type InvitationState = {
   rsvp: {
     companions: boolean;
     guestMsg: boolean;
-    meal: boolean;
     maxCompanions: number;
     thanks: string;
     deadline: string;
@@ -100,7 +99,6 @@ export const useInvitation = create<InvitationState>((set) => ({
   rsvp: {
     companions: true,
     guestMsg: true,
-    meal: false,
     maxCompanions: 2,
     thanks: "شكرًا لتأكيد حضوركم، سعداء بمشاركتكم فرحتنا.",
     deadline: "قبل 3 أيام من الحفل",

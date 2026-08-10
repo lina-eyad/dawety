@@ -5,6 +5,7 @@ import { ROUTES } from "@/constants/routes";
 import { Link } from "@/i18n/navigation";
 
 import { NAV_LINKS } from "../content";
+import { NavAuth } from "./nav-auth";
 import { NavLanguageSwitcher } from "./nav-language-switcher";
 
 /** Landing-page top navigation (RTL): logo · links · language + login + CTA. */
@@ -47,13 +48,7 @@ export function MarketingNavbar() {
             className="hidden h-6 w-px bg-warm-border sm:block"
             aria-hidden
           />
-          {/* Login page not built yet — placeholder anchor to avoid a dead route. */}
-          <a
-            href="#login"
-            className="hidden text-[15px] font-medium text-ink transition-colors hover:text-primary sm:block"
-          >
-            تسجيل الدخول
-          </a>
+          <NavAuth />
           <Button
             size="lg"
             className="h-[50px] rounded-[8px] font-semibold shadow-lg"

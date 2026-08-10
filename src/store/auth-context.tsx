@@ -2,7 +2,7 @@
 
 import { createContext } from "react";
 
-import type { AuthStatus, LoginCredentials, User } from "@/types/auth.types";
+import type { AuthStatus, User } from "@/types/auth.types";
 
 export interface AuthState {
   status: AuthStatus;
@@ -33,8 +33,13 @@ export function authReducer(state: AuthState, action: AuthAction): AuthState {
 }
 
 export interface AuthContextValue extends AuthState {
-  /** Placeholder — wire to the real login service once the backend exists. */
-  login: (credentials: LoginCredentials) => Promise<void>;
+  /** Send a one-time login code to the email. Returns the code (demo: no
+   *  email backend yet — swap for the real mailer/OTP service). */
+  requestEmailCode: (email: string) => Promise<string>;
+  /** Verify the entered code; resolves true and signs the user in on match. */
+  verifyEmailCode: (code: string) => Promise<boolean>;
+  /** Continue with Google (demo — wire to real OAuth when configured). */
+  loginWithGoogle: () => Promise<void>;
   logout: () => void;
 }
 

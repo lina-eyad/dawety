@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Loader2, Mail, Pencil } from "lucide-react";
+import { ArrowLeft, Loader2, Mail, Pencil } from "lucide-react";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -126,7 +126,7 @@ export function LoginForm() {
               <span className="text-sm font-medium text-ink">
                 البريد الإلكتروني
               </span>
-              <div className="relative">
+              <div className="relative" dir="ltr">
                 <Mail
                   className="pointer-events-none absolute end-3 top-1/2 size-4 -translate-y-1/2 text-ink-muted"
                   aria-hidden
@@ -140,7 +140,7 @@ export function LoginForm() {
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && sendCode()}
                   placeholder="name@example.com"
-                  className="h-[50px] rounded-[12px] pe-10 text-start"
+                  className="h-[50px] rounded-[12px] pe-11 text-start"
                 />
               </div>
             </label>
@@ -155,7 +155,7 @@ export function LoginForm() {
                 <Loader2 className="size-4 animate-spin" aria-hidden />
               ) : null}
               إرسال رمز الدخول
-              <ArrowRight className="size-4" aria-hidden />
+              <ArrowLeft className="size-4" aria-hidden />
             </Button>
           </div>
 

@@ -46,7 +46,7 @@ export function PricingSection() {
 
       <div className="mx-auto mt-14 grid max-w-6xl items-stretch gap-6 md:grid-cols-3">
         {/* Complete plan */}
-        <div className="relative flex flex-col gap-6 rounded-[30px] border-2 border-primary/20 bg-card p-8 shadow-brand transition-all duration-300 hover:-translate-y-1">
+        <div className="relative flex flex-col gap-6 rounded-[30px] border-2 border-primary/20 bg-card p-8 shadow-brand transition-all duration-300 hover:-translate-y-1 md:order-2">
           <span className="absolute start-8 -top-3 rounded-full bg-primary px-4 py-1 text-xs font-medium text-primary-foreground">
             الأنسب لمعظم المستخدمين
           </span>
@@ -114,7 +114,7 @@ export function PricingSection() {
         </div>
 
         {/* Free trial */}
-        <div className="flex flex-col gap-6 rounded-[30px] border border-primary/20 bg-card p-8 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg">
+        <div className="flex flex-col gap-6 rounded-[30px] border border-primary/20 bg-card p-8 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg md:order-1">
           <div>
             <h3 className="text-xl font-bold text-ink">تجربة مجانية</h3>
             <p className="text-sm text-ink-muted">للتصميم والمعاينة</p>
@@ -148,7 +148,7 @@ export function PricingSection() {
         </div>
 
         {/* Organizers bundle */}
-        <div className="flex flex-col gap-6 rounded-[30px] border border-primary/20 bg-card p-8 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg">
+        <div className="flex flex-col gap-6 rounded-[30px] border border-primary/20 bg-card p-8 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg md:order-3">
           <div>
             <h3 className="text-xl font-bold text-ink">للمنظّمين</h3>
             <p className="text-sm text-ink-muted">
@@ -179,7 +179,7 @@ export function PricingSection() {
             className="mt-auto h-[50px] w-full rounded-[8px] border-primary font-semibold text-primary"
             asChild
           >
-            <Link href={ROUTES.create}>ابدأ الباقة</Link>
+            <Link href={ROUTES.create}>ابدأ التصميم</Link>
           </Button>
         </div>
       </div>

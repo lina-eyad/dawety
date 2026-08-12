@@ -60,7 +60,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     // Bundle of 5 invitations at ~20% off the single-invitation price.
     price: { SAR: "149", USD: "39", GBP: "32" },
     unit: "باقة 5 دعوات",
-    cta: "ابدأ الباقة",
+    cta: "ابدأ التصميم",
     href: ROUTES.create,
     features: [
       "كل مزايا «دعوة واحدة»",

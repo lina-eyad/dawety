@@ -156,7 +156,7 @@ export function InvitationsGrid() {
 
   function InvitationsTable() {
     const action =
-      "flex size-8 items-center justify-center rounded-lg text-ink-muted transition-colors";
+      "flex size-8 items-center justify-center rounded-[8px] text-ink-muted transition-colors";
     return (
       <div className="overflow-x-auto rounded-2xl border border-warm-border bg-card">
         <table className="w-full min-w-[760px] text-sm">

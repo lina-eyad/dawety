@@ -137,7 +137,7 @@ export function InvitationCard({ invite }: { invite: Invitation }) {
               <button
                 type="button"
                 aria-label="خيارات"
-                className="flex size-8 shrink-0 items-center justify-center rounded-lg text-ink-muted transition-colors hover:bg-rose hover:text-primary"
+                className="flex size-8 shrink-0 items-center justify-center rounded-[8px] text-ink-muted transition-colors hover:bg-rose hover:text-primary"
               >
                 <MoreVertical className="size-4" aria-hidden />
               </button>
@@ -176,7 +176,7 @@ export function InvitationCard({ invite }: { invite: Invitation }) {
         </div>
 
         <div className="mt-auto flex gap-2 pt-1">
-          <Button asChild size="sm" className="flex-1 rounded-lg">
+          <Button asChild size="sm" className="flex-1 rounded-[8px]">
             <Link href={ROUTES.create}>
               <Pencil className="size-3.5" aria-hidden />
               تعديل
@@ -186,7 +186,7 @@ export function InvitationCard({ invite }: { invite: Invitation }) {
             asChild
             size="sm"
             variant="outline"
-            className="flex-1 rounded-lg border-primary text-primary"
+            className="flex-1 rounded-[8px] border-primary text-primary"
           >
             <Link href={ROUTES.preview}>معاينة</Link>
           </Button>

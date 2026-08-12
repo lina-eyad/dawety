@@ -83,7 +83,7 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
       <Button
         asChild
         size="lg"
-        className="h-11 rounded-xl font-semibold shadow-brand"
+        className="h-11 rounded-[8px] font-semibold shadow-brand"
       >
         <Link href={ROUTES.create} onClick={onNavigate}>
           <Plus className="size-4" aria-hidden />

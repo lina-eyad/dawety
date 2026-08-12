@@ -57,16 +57,14 @@ export const PRICING_PLANS: PricingPlan[] = [
   {
     name: "للمنظّمين",
     tagline: "لمخطّطي المناسبات ومتعدّدي الدعوات",
-    unit: "عرض مخصّص حسب عدد مناسباتك",
-    contact: true,
-    cta: "تواصل عبر واتساب",
-    // Placeholder number — replace with the real business WhatsApp line.
-    href: `https://wa.me/966501234567?text=${encodeURIComponent(
-      "مرحباً، أرغب بالاستفسار عن باقة المنظّمين في INVITERA.",
-    )}`,
+    // Bundle of 5 invitations at ~20% off the single-invitation price.
+    price: { SAR: "149", USD: "39", GBP: "32" },
+    unit: "باقة 5 دعوات",
+    cta: "ابدأ الباقة",
+    href: ROUTES.create,
     features: [
       "كل مزايا «دعوة واحدة»",
-      "أسعار خاصة على الكميات",
+      "خصم يصل إلى 20% لكل دعوة",
       "إدارة عدة مناسبات من مكان واحد",
       "لوحة تحكم موحّدة للردود",
       "دعم مخصّص ذو أولوية",

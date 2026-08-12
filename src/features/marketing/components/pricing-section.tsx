@@ -13,10 +13,18 @@ import { Reveal } from "./reveal";
 import { SectionHeading } from "./section-heading";
 
 const CURRENCIES = [
-  { code: "USD", symbol: "$", price: "9.99" },
-  { code: "SAR", symbol: "ر.س", price: "37" },
-  { code: "GBP", symbol: "£", price: "7.99" },
+  { code: "USD", symbol: "$", price: "9.99", bundle: "39" },
+  { code: "SAR", symbol: "ر.س", price: "37", bundle: "149" },
+  { code: "GBP", symbol: "£", price: "7.99", bundle: "32" },
 ] as const;
+
+const ORG_FEATURES = [
+  "كل مزايا «دعوة واحدة»",
+  "خصم يصل إلى 20% لكل دعوة",
+  "إدارة عدة مناسبات من مكان واحد",
+  "لوحة تحكم موحّدة للردود",
+  "دعم مخصّص ذو أولوية",
+];
 
 /** "صمّم مجانًا، وانشر عندما تكون جاهزًا" — complete vs free-trial plans. */
 export function PricingSection() {
@@ -36,7 +44,7 @@ export function PricingSection() {
         />
       </Reveal>
 
-      <div className="mx-auto mt-14 grid max-w-4xl gap-6 md:grid-cols-2">
+      <div className="mx-auto mt-14 grid max-w-6xl items-stretch gap-6 md:grid-cols-3">
         {/* Complete plan */}
         <div className="relative flex flex-col gap-6 rounded-[30px] border-2 border-primary/20 bg-card p-8 shadow-brand transition-all duration-300 hover:-translate-y-1">
           <span className="absolute start-8 -top-3 rounded-full bg-primary px-4 py-1 text-xs font-medium text-primary-foreground">
@@ -136,6 +144,42 @@ export function PricingSection() {
             asChild
           >
             <Link href={ROUTES.create}>ابدأ مجانًا</Link>
+          </Button>
+        </div>
+
+        {/* Organizers bundle */}
+        <div className="flex flex-col gap-6 rounded-[30px] border border-primary/20 bg-card p-8 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg">
+          <div>
+            <h3 className="text-xl font-bold text-ink">للمنظّمين</h3>
+            <p className="text-sm text-ink-muted">
+              لمخطّطي المناسبات ومتعدّدي الدعوات
+            </p>
+          </div>
+
+          <div className="flex items-end gap-1">
+            <span className="text-5xl font-bold text-ink">{cur.bundle}</span>
+            <span className="mb-2 text-lg text-ink-muted">{cur.symbol}</span>
+            <span className="ms-2 mb-2 text-ink-muted">باقة 5 دعوات</span>
+          </div>
+
+          <ul className="flex flex-col gap-3">
+            {ORG_FEATURES.map((f) => (
+              <li key={f} className="flex items-center gap-3">
+                <span className="flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
+                  <Check className="size-3" aria-hidden />
+                </span>
+                <span className="text-sm text-ink">{f}</span>
+              </li>
+            ))}
+          </ul>
+
+          <Button
+            size="lg"
+            variant="outline"
+            className="mt-auto h-[50px] w-full rounded-[8px] border-primary font-semibold text-primary"
+            asChild
+          >
+            <Link href={ROUTES.create}>ابدأ الباقة</Link>
           </Button>
         </div>
       </div>

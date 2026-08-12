@@ -24,7 +24,7 @@ import { ROUTES } from "@/constants/routes";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
-import type { InviteStatus, Invitation } from "../content";
+import type { InviteStatus, Invitation, PaymentStatus } from "../content";
 
 /** Icons are keyed by string so a Server Component can render StatCard
  *  without passing a function (component) across the RSC boundary. */
@@ -84,6 +84,26 @@ export function StatusBadge({ status }: { status: InviteStatus }) {
   );
 }
 
+export function PaymentBadge({ payment }: { payment: PaymentStatus }) {
+  const paid = payment === "paid";
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
+        paid ? "bg-green-50 text-green-700" : "bg-amber-50 text-amber-700",
+      )}
+    >
+      <span
+        className={cn(
+          "size-1.5 rounded-full",
+          paid ? "bg-green-600" : "bg-amber-500",
+        )}
+      />
+      {paid ? "مدفوعة" : "غير مدفوعة"}
+    </span>
+  );
+}
+
 /** Invitation card with cover, status, quick stats and actions. */
 export function InvitationCard({ invite }: { invite: Invitation }) {
   return (
@@ -98,6 +118,9 @@ export function InvitationCard({ invite }: { invite: Invitation }) {
         />
         <span className="absolute end-3 top-3">
           <StatusBadge status={invite.status} />
+        </span>
+        <span className="absolute start-3 top-3">
+          <PaymentBadge payment={invite.payment} />
         </span>
       </div>
 

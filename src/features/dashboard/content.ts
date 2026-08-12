@@ -18,6 +18,7 @@ export const DASHBOARD_NAV: DashboardNavItem[] = [
 ];
 
 export type InviteStatus = "published" | "draft";
+export type PaymentStatus = "paid" | "unpaid";
 
 export type Invitation = {
   id: string;
@@ -25,6 +26,7 @@ export type Invitation = {
   type: string;
   date: string;
   status: InviteStatus;
+  payment: PaymentStatus;
   views: number;
   rsvps: number;
   confirmed: number;
@@ -38,6 +40,7 @@ export const INVITATIONS: Invitation[] = [
     type: "زفاف",
     date: "20 يونيو 2025",
     status: "published",
+    payment: "paid",
     views: 1240,
     rsvps: 312,
     confirmed: 280,
@@ -49,6 +52,7 @@ export const INVITATIONS: Invitation[] = [
     type: "خطوبة",
     date: "8 مايو 2025",
     status: "published",
+    payment: "paid",
     views: 640,
     rsvps: 150,
     confirmed: 132,
@@ -60,6 +64,7 @@ export const INVITATIONS: Invitation[] = [
     type: "تخرج",
     date: "2 يوليو 2025",
     status: "published",
+    payment: "paid",
     views: 420,
     rsvps: 96,
     confirmed: 88,
@@ -71,6 +76,7 @@ export const INVITATIONS: Invitation[] = [
     type: "عيد ميلاد",
     date: "مسودة",
     status: "draft",
+    payment: "unpaid",
     views: 0,
     rsvps: 0,
     confirmed: 0,
@@ -82,6 +88,7 @@ export const INVITATIONS: Invitation[] = [
     type: "استقبال مولود",
     date: "مسودة",
     status: "draft",
+    payment: "unpaid",
     views: 0,
     rsvps: 0,
     confirmed: 0,

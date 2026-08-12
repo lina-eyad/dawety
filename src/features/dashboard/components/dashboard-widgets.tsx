@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import {
+  CalendarCheck,
   Eye,
+  Mail,
   MoreVertical,
   Pencil,
   Share2,
   Trash2,
   Users,
-  type LucideIcon,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -25,18 +26,28 @@ import { cn } from "@/lib/utils";
 
 import type { InviteStatus, Invitation } from "../content";
 
+/** Icons are keyed by string so a Server Component can render StatCard
+ *  without passing a function (component) across the RSC boundary. */
+const STAT_ICONS = {
+  mail: Mail,
+  eye: Eye,
+  users: Users,
+  confirmed: CalendarCheck,
+} as const;
+
 /** Compact metric tile for the dashboard overview. */
 export function StatCard({
-  Icon,
+  icon,
   label,
   value,
   hint,
 }: {
-  Icon: LucideIcon;
+  icon: keyof typeof STAT_ICONS;
   label: string;
   value: string;
   hint?: string;
 }) {
+  const Icon = STAT_ICONS[icon];
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-warm-border bg-card p-5 shadow-soft">
       <div className="flex items-center justify-between">

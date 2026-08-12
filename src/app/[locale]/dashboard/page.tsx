@@ -1,4 +1,3 @@
-import { CalendarCheck, Eye, Mail, Users } from "lucide-react";
 import { setRequestLocale } from "next-intl/server";
 
 import { ROUTES } from "@/constants/routes";
@@ -32,19 +31,19 @@ export default async function DashboardPage({
 
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <StatCard
-            Icon={Mail}
+            icon="mail"
             label="إجمالي الدعوات"
             value={fmt(stats.invitations)}
             hint={`${stats.published} منشورة`}
           />
-          <StatCard Icon={Eye} label="المشاهدات" value={fmt(stats.views)} />
+          <StatCard icon="eye" label="المشاهدات" value={fmt(stats.views)} />
           <StatCard
-            Icon={Users}
+            icon="users"
             label="إجمالي الردود"
             value={fmt(stats.rsvps)}
           />
           <StatCard
-            Icon={CalendarCheck}
+            icon="confirmed"
             label="الحضور المؤكد"
             value={fmt(stats.confirmed)}
           />

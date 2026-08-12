@@ -49,7 +49,7 @@ function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
             className={cn(
               "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors",
               active
-                ? "bg-primary text-primary-foreground shadow-soft"
+                ? "bg-rose text-primary"
                 : "text-ink-muted hover:bg-rose/60 hover:text-primary",
             )}
           >

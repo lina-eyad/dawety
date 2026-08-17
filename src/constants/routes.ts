@@ -14,6 +14,8 @@ export const ROUTES = {
   preview: "/preview",
   checkout: "/checkout",
   share: "/share",
+  business: "/business",
+  partners: "/partners",
   login: "/login",
   register: "/register",
   dashboard: "/dashboard",

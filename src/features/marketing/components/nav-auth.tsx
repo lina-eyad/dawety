@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutDashboard, LogOut } from "lucide-react";
+import { Building2, LayoutDashboard, LogOut } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -56,6 +56,13 @@ export function NavAuth() {
             لوحة التحكم
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href={ROUTES.business}>
+            <Building2 className="size-4" aria-hidden />
+            وضع الأعمال
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem
           variant="destructive"
           onClick={() => {
